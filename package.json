@@ -1,0 +1,23 @@
+{
+  "name": "multi-menu",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "babel src --out-dir lib --source-maps",
+    "watch": "npm run compile -- --watch"
+  },
+  "author": "Jeremy Blalock",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1"
+  }
+}
