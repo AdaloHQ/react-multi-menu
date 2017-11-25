@@ -92,6 +92,8 @@ export class MenuItem extends Component {
   handleHover = e => {
     let { path, onHover } = this.props
 
+    e.stopPropagation()
+
     onHover(path)
   }
 
@@ -107,7 +109,7 @@ export class MenuItem extends Component {
           'multi-menu-item',
           { open, 'has-children': hasChildren }
         )}
-        onMouseEnter={this.handleHover}
+        onMouseOver={this.handleHover}
       >
         <div className="multi-menu-item-label" title={data.label}>
           {data.label}
