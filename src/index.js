@@ -32,6 +32,7 @@ export default class MultiMenuWrapper extends Component {
   }
 
   handleHover = openPath => {
+    console.log("OPEN PATH:", openPath)
     this.setState({ openPath })
   }
 
@@ -90,6 +91,8 @@ export class MenuItem extends Component {
 
   handleHover = e => {
     let { path, onHover } = this.props
+
+    e.stopPropagation()
 
     onHover(path)
   }
