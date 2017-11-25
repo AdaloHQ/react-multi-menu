@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
-export const ALIGN_LEFT = 'align-left'
-export const ALIGN_CENTER = 'align-center'
-export const ALIGN_RIGHT = 'align-right'
+const LEFT = 'left'
+const RIGHT = 'right'
 
 export const matches = (openPath, path) => {
   for (let i = 0; i < path.length; i += 1) {
@@ -20,6 +19,10 @@ const stopPropagation = e => {
 }
 
 export default class MultiMenuWrapper extends Component {
+  static defaultProps = {
+    expandDirection: RIGHT
+  }
+
   constructor(props) {
     super(props)
 
@@ -33,11 +36,25 @@ export default class MultiMenuWrapper extends Component {
   }
 
   render() {
-    let { align, isSubMenu, menu, position, onSelect } = this.props
+    let {
+      align,
+      expandDirection,
+      isSubMenu,
+      menu,
+      onSelect,
+      position
+    } = this.props
+
     let { openPath } = this.state
 
     return (
-      <div className="multi-menu-wrapper">
+      <div
+        className={classNames(
+          'multi-menu-wrapper',
+          `expand-${expandDirection}`
+        )}
+        style={position}
+      >
         <MultiMenu
           {...{ isSubMenu, onSelect }}
           basePath={[]}
@@ -136,14 +153,15 @@ export class MenuItem extends Component {
 }
 
 export class MultiMenuTrigger extends Component {
-  state = { expanded: false, align: null }
+  state = { expanded: false, position: null, expandDirection: null }
 
   handleClick = e => {
     if (this.state.expanded) {
       return this.setState({ expanded: false })
     }
 
-    let align = this.state.align || ALIGN_CENTER
+    let position = this.state.position
+    let expandDirection = RIGHT
 
     if (this.element) {
       let rect = this.element.getBoundingClientRect()
@@ -151,14 +169,22 @@ export class MultiMenuTrigger extends Component {
 
       let center = (rect.left + rect.right) / 2
 
+      if (center * 2 > windowWidth) {
+        expandDirection = LEFT
+      }
+
+      position = { top: rect.bottom + 8 }
+
       if (center - 90 < 20) {
-        align = ALIGN_LEFT
+        position.left = rect.left
       } else if (center + 90 > windowWidth - 20) {
-        align = ALIGN_RIGHT
+        position.left = rect.right - 180
+      } else {
+        position.left = center - 90
       }
     }
 
-    this.setState({ align, expanded: true })
+    this.setState({ position, expandDirection, expanded: true })
   }
 
   handleSelect = val => {
@@ -187,18 +213,20 @@ export class MultiMenuTrigger extends Component {
 
   render() {
     let { children, menu } = this.props
-    let { expanded, align } = this.state
+    let { expandDirection, expanded, position } = this.state
 
     return (
       <div
-        className={classNames('multi-menu-trigger', align, { expanded })}
+        className={classNames('multi-menu-trigger', { expanded })}
         onMouseDown={stopPropagation}
         ref={this.elementRef}
       >
         {expanded
           ? <MultiMenuWrapper
+              expandDirection={expandDirection}
               menu={menu}
               onSelect={this.handleSelect}
+              position={position}
             />
           : null}
         <div className="multi-menu-trigger-element" onClick={this.handleClick}>

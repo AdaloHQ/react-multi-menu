@@ -43,6 +43,13 @@
   margin-top: -8px;
 }
 
+.multi-menu-wrapper.expand-left .multi-menu-child {
+  right: 100%;
+  left: auto;
+  margin-right: 2px;
+  margin-left: 0;
+}
+
 .multi-menu-trigger-element {
   cursor: pointer;
 }
@@ -64,9 +71,8 @@
 }
 
 .multi-menu-trigger > .multi-menu-wrapper {
-  position: absolute;
+  position: fixed;
   top: 100%;
-  margin-top: 8px;
 }
 
 .multi-menu-trigger.align-left .multi-menu-wrapper {

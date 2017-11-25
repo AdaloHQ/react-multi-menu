@@ -39,7 +39,7 @@ storiesOf('MultiMenu', module)
   ))
 
 storiesOf('MultiMenuTrigger', module)
-  .add('aligned-left', () => (
+  .add('Aligned Left', () => (
     <div style={{ ...styles, justifyContent: 'flex-start' }}>
       <MultiMenuTrigger
         menu={menuData}
@@ -49,7 +49,7 @@ storiesOf('MultiMenuTrigger', module)
       </MultiMenuTrigger>
     </div>
   ))
-  .add('aligned-center', () => (
+  .add('Aligned Center', () => (
     <div style={{ ...styles, justifyContent: 'center' }}>
       <MultiMenuTrigger
         menu={menuData}
@@ -59,8 +59,18 @@ storiesOf('MultiMenuTrigger', module)
       </MultiMenuTrigger>
     </div>
   ))
-  .add('aligned-right', () => (
+  .add('Aligned Right', () => (
     <div style={{ ...styles, justifyContent: 'flex-end' }}>
+      <MultiMenuTrigger
+        menu={menuData}
+        onSelect={action('Selected option')}
+      >
+        Click Me
+      </MultiMenuTrigger>
+    </div>
+  ))
+  .add('Aligned Center, Expand Left', () => (
+    <div style={{ ...styles, justifyContent: 'center', marginLeft: 40 }}>
       <MultiMenuTrigger
         menu={menuData}
         onSelect={action('Selected option')}
