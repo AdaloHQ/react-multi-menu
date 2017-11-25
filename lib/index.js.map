@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/index.js"],"names":["console","log"],"mappings":";;AAAAA,QAAQC,GAAR,CAAY,QAAZ","file":"index.js","sourcesContent":["console.log(\"Hello?\")\n"]}
+{"version":3,"sources":["../src/index.js"],"names":["MultiMenu"],"mappings":";;;;;;;;AAAA;;;;;;;;;;;;IAEqBA,S;;;;;;;;;;;6BACV;AACP,aACE;AAAA;AAAA;AAAA;AAAA,OADF;AAGD;;;;;;kBALkBA,S","file":"index.js","sourcesContent":["import React, { Component } from 'react'\n\nexport default class MultiMenu extends Component {\n  render() {\n    return (\n      <h1>Hello, world!</h1>\n    )\n  }\n}\n"]}
