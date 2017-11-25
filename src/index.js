@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
 
 // Positions are symbols to prevent hardcoding values.
 // The only way to reference position is by directly importing.
@@ -32,7 +33,6 @@ export default class MultiMenuWrapper extends Component {
   }
 
   handleHover = openPath => {
-    console.log("OPEN PATH:", openPath)
     this.setState({ openPath })
   }
 
@@ -92,25 +92,36 @@ export class MenuItem extends Component {
   handleHover = e => {
     let { path, onHover } = this.props
 
-    e.stopPropagation()
-
     onHover(path)
   }
 
   render() {
     let { data, path, onHover, onSelect, openPath } = this.props
 
+    let open = matches(openPath, path)
+    let hasChildren = data.children && data.children.length > 0
+
     return (
-      <div className="multi-menu-item" onMouseMove={this.handleHover}>
-        {data.label}
-        {matches(openPath, path) && data.children && data.children.length > 0
-          ? <MultiMenu
-              basePath={path}
-              menu={data.children}
-              onHover={onHover}
-              onSelect={onSelect}
-              openPath={openPath}
-            />
+      <div
+        className={classNames(
+          'multi-menu-item',
+          { open, 'has-children': hasChildren }
+        )}
+        onMouseEnter={this.handleHover}
+      >
+        <div className="multi-menu-item-label" title={data.label}>
+          {data.label}
+        </div>
+        {open && hasChildren
+          ? <div className="multi-menu-child">
+              <MultiMenu
+                basePath={path}
+                menu={data.children}
+                onHover={onHover}
+                onSelect={onSelect}
+                openPath={openPath}
+              />
+            </div>
           : null}
       </div>
     )
