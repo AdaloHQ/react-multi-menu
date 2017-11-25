@@ -1,14 +1,14 @@
 .multi-menu {
-  width: 200px;
+  width: 180px;
   background: #222;
   border-radius: 8px;
   padding: 8px 0;
   color: #fff;
+  text-align: left;
+  font-size: 1rem;
 }
 
 .multi-menu-item {
-  padding: 2px 12px;
-  cursor: pointer;
   position: relative;
   padding-right: 20px;
 }
@@ -17,6 +17,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
+  padding: 2px 0 2px 12px;
 }
 
 .multi-menu-item.open {
@@ -28,6 +30,7 @@
   position: absolute;
   right: 8px;
   line-height: 12px;
+
   top: 50%;
   margin-top: -6px;
 }
@@ -38,4 +41,43 @@
   margin-left: 2px;
   top: 0;
   margin-top: -8px;
+}
+
+.multi-menu-trigger-element {
+  cursor: pointer;
+}
+
+.multi-menu-trigger {
+  position: relative;
+}
+
+.multi-menu-trigger.expanded:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-top: 3px;
+  border: 5px solid transparent;
+  border-top: none;
+  border-bottom-color: #222;
+}
+
+.multi-menu-trigger > .multi-menu-wrapper {
+  position: absolute;
+  top: 100%;
+  margin-top: 8px;
+}
+
+.multi-menu-trigger.align-left .multi-menu-wrapper {
+  left: 0;
+}
+
+.multi-menu-trigger.align-right .multi-menu-wrapper {
+  right: 0;
+}
+
+.multi-menu-trigger.align-center .multi-menu-wrapper {
+  left: 50%;
+  margin-left: -90px;
 }

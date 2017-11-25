@@ -1,17 +1,9 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
-// Positions are symbols to prevent hardcoding values.
-// The only way to reference position is by directly importing.
-export const TOP = Symbol('TOP')
-export const TOP_LEFT = Symbol('TOP_LEFT')
-export const TOP_RIGHT = Symbol('TOP_RIGHT')
-
-export const BOTTOM = Symbol('BOTTOM')
-export const BOTTOM_LEFT = Symbol('BOTTOM_LEFT')
-export const BOTTOM_RIGHT = Symbol('BOTTOM_RIGHT')
-
-export const DEFAULT_POSITION = BOTTOM
+export const ALIGN_LEFT = 'align-left'
+export const ALIGN_CENTER = 'align-center'
+export const ALIGN_RIGHT = 'align-right'
 
 export const matches = (openPath, path) => {
   for (let i = 0; i < path.length; i += 1) {
@@ -21,6 +13,10 @@ export const matches = (openPath, path) => {
   }
 
   return true
+}
+
+const stopPropagation = e => {
+  e.stopPropagation()
 }
 
 export default class MultiMenuWrapper extends Component {
@@ -41,7 +37,7 @@ export default class MultiMenuWrapper extends Component {
     let { openPath } = this.state
 
     return (
-      <div>
+      <div className="multi-menu-wrapper">
         <MultiMenu
           {...{ isSubMenu, onSelect }}
           basePath={[]}
@@ -99,10 +95,6 @@ export class MenuItem extends Component {
     onHover(path)
   }
 
-  stopProp = e => {
-    e.stopPropagation()
-  }
-
   render() {
     let { data, path, onHover, onSelect, openPath } = this.props
 
@@ -125,7 +117,10 @@ export class MenuItem extends Component {
           {data.label}
         </div>
         {open && hasChildren
-          ? <div className="multi-menu-child" onMouseOver={this.stopProp}>
+          ? <div
+              className="multi-menu-child"
+              onMouseOver={stopPropagation}
+            >
               <MultiMenu
                 basePath={path}
                 menu={data.children}
@@ -135,6 +130,80 @@ export class MenuItem extends Component {
               />
             </div>
           : null}
+      </div>
+    )
+  }
+}
+
+export class MultiMenuTrigger extends Component {
+  state = { expanded: false, align: null }
+
+  handleClick = e => {
+    if (this.state.expanded) {
+      return this.setState({ expanded: false })
+    }
+
+    let align = this.state.align || ALIGN_CENTER
+
+    if (this.element) {
+      let rect = this.element.getBoundingClientRect()
+      let windowWidth = window.innerWidth
+
+      let center = (rect.left + rect.right) / 2
+
+      if (center - 90 < 20) {
+        align = ALIGN_LEFT
+      } else if (center + 90 > windowWidth - 20) {
+        align = ALIGN_RIGHT
+      }
+    }
+
+    this.setState({ align, expanded: true })
+  }
+
+  handleSelect = val => {
+    let { onSelect } = this.props
+
+    this.setState({ expanded: false })
+
+    if (onSelect) {
+      onSelect(val)
+    }
+  }
+
+  handleClickOutside = e => {
+    this.setState({ expanded: false })
+  }
+
+  componentDidMount() {
+    window.addEventListener('mousedown', this.handleClickOutside)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousedown', this.handleClickOutside)
+  }
+
+  elementRef = el => this.element = el
+
+  render() {
+    let { children, menu } = this.props
+    let { expanded, align } = this.state
+
+    return (
+      <div
+        className={classNames('multi-menu-trigger', align, { expanded })}
+        onMouseDown={stopPropagation}
+        ref={this.elementRef}
+      >
+        {expanded
+          ? <MultiMenuWrapper
+              menu={menu}
+              onSelect={this.handleSelect}
+            />
+          : null}
+        <div className="multi-menu-trigger-element" onClick={this.handleClick}>
+          {children}
+        </div>
       </div>
     )
   }

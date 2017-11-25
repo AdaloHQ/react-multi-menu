@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
 
-import MultiMenu from '../src'
+import MultiMenu, { MultiMenuTrigger } from '../src'
 import '../styles.css'
 
 const menuData = [
@@ -28,10 +28,44 @@ const menuData = [
   },
 ]
 
+const styles = { display: 'flex', flexDirection: 'row' }
+
 storiesOf('MultiMenu', module)
   .add('basic', () => (
     <MultiMenu
       menu={menuData}
       onSelect={action('Selected option')}
     />
+  ))
+
+storiesOf('MultiMenuTrigger', module)
+  .add('aligned-left', () => (
+    <div style={{ ...styles, justifyContent: 'flex-start' }}>
+      <MultiMenuTrigger
+        menu={menuData}
+        onSelect={action('Selected option')}
+      >
+        Click Me
+      </MultiMenuTrigger>
+    </div>
+  ))
+  .add('aligned-center', () => (
+    <div style={{ ...styles, justifyContent: 'center' }}>
+      <MultiMenuTrigger
+        menu={menuData}
+        onSelect={action('Selected option')}
+      >
+        Click Me
+      </MultiMenuTrigger>
+    </div>
+  ))
+  .add('aligned-right', () => (
+    <div style={{ ...styles, justifyContent: 'flex-end' }}>
+      <MultiMenuTrigger
+        menu={menuData}
+        onSelect={action('Selected option')}
+      >
+        Click Me
+      </MultiMenuTrigger>
+    </div>
   ))
