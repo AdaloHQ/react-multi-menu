@@ -32,5 +32,6 @@ storiesOf('MultiMenu', module)
   .add('basic', () => (
     <MultiMenu
       menu={menuData}
+      onSelect={action('Selected option')}
     />
   ))

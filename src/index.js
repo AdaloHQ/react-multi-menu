@@ -86,6 +86,8 @@ export class MenuItem extends Component {
   handleClick = e => {
     let { data: { value }, onSelect } = this.props
 
+    if (!onSelect) { return }
+
     onSelect(value)
   }
 
@@ -95,6 +97,10 @@ export class MenuItem extends Component {
     e.stopPropagation()
 
     onHover(path)
+  }
+
+  stopProp = e => {
+    e.stopPropagation()
   }
 
   render() {
@@ -111,11 +117,15 @@ export class MenuItem extends Component {
         )}
         onMouseOver={this.handleHover}
       >
-        <div className="multi-menu-item-label" title={data.label}>
+        <div
+          className="multi-menu-item-label"
+          onClick={this.handleClick}
+          title={data.label}
+        >
           {data.label}
         </div>
         {open && hasChildren
-          ? <div className="multi-menu-child">
+          ? <div className="multi-menu-child" onMouseOver={this.stopProp}>
               <MultiMenu
                 basePath={path}
                 menu={data.children}
