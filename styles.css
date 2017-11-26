@@ -72,7 +72,7 @@
 
 .multi-menu-trigger > .multi-menu-wrapper {
   position: fixed;
-  top: 100%;
+  z-index: 99999;
 }
 
 .multi-menu-trigger.align-left .multi-menu-wrapper {
