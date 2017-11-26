@@ -5,7 +5,7 @@
   padding: 8px 0;
   color: #fff;
   text-align: left;
-  font-size: 1rem;
+  font-size: 1em;
 }
 
 .multi-menu-item {
@@ -18,7 +18,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
-  padding: 2px 0 2px 12px;
+  padding: 4px 0 4px 12px;
 }
 
 .multi-menu-item.open {
