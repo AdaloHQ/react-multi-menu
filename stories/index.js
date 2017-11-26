@@ -10,6 +10,7 @@ import '../styles.css'
 const menuData = [
   { label: 'Item 1', value: 'item1' },
   { label: 'Item 2', value: 'item2' },
+  null,
   { label: 'Item 3', value: 'item3' },
   {
     label: 'Item 4',

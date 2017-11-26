@@ -95,6 +95,8 @@ export class MultiMenu extends Component {
   }
 }
 
+export const MenuSpacer = () => (<div className="multi-menu-spacer" />)
+
 export class MenuItem extends Component {
   handleClick = e => {
     let { data: { value }, onSelect } = this.props
@@ -114,6 +116,10 @@ export class MenuItem extends Component {
 
   render() {
     let { data, path, onHover, onSelect, openPath } = this.props
+
+    if (data === null) {
+      return <MenuSpacer />
+    }
 
     let open = matches(openPath, path)
     let hasChildren = data.children && data.children.length > 0
