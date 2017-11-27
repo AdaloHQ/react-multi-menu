@@ -68,6 +68,7 @@
   border: 5px solid transparent;
   border-top: none;
   border-bottom-color: #222;
+  z-index: 99999;
 }
 
 .multi-menu-trigger > .multi-menu-wrapper {
