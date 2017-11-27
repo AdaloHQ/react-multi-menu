@@ -253,7 +253,7 @@ export class MultiMenuTrigger extends Component {
               position={position}
             />
           : null}
-        <div className="multi-menu-trigger-element" onClick={this.handleClick}>
+        <div className="multi-menu-trigger-element" onMouseDown={this.handleClick}>
           {children}
         </div>
       </div>
