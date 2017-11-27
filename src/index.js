@@ -6,6 +6,7 @@ import { isDescendent } from './dom'
 
 const LEFT = 'left'
 const RIGHT = 'right'
+const ESC = 27
 
 export const matches = (openPath, path) => {
   for (let i = 0; i < path.length; i += 1) {
@@ -220,6 +221,12 @@ export class MultiMenuTrigger extends Component {
     e.preventDefault()
   }
 
+  handleKeyDown = e => {
+    if (e.which === ESC) {
+      this.setState({ expanded: false })
+    }
+  }
+
   elementRef = el => this.element = el
 
   render() {
@@ -235,6 +242,7 @@ export class MultiMenuTrigger extends Component {
           ? <DocumentEvents
               onMouseDown={this.handleClickOutside}
               onWheel={this.handleScroll}
+              onKeyDown={this.handleKeyDown}
             />
           : null}
         {expanded
