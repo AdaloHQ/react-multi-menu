@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
+import DocumentEvents from 'react-document-events'
+
+import { isDescendent } from './dom'
 
 const LEFT = 'left'
 const RIGHT = 'right'
@@ -208,15 +211,13 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleClickOutside = e => {
+    if (isDescendent(e.target, this.element)) { return }
+
     this.setState({ expanded: false })
   }
 
-  componentDidMount() {
-    window.addEventListener('mousedown', this.handleClickOutside)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('mousedown', this.handleClickOutside)
+  handleScroll = e => {
+    e.preventDefault()
   }
 
   elementRef = el => this.element = el
@@ -228,9 +229,14 @@ export class MultiMenuTrigger extends Component {
     return (
       <div
         className={classNames('multi-menu-trigger', { expanded })}
-        onMouseDown={stopPropagation}
         ref={this.elementRef}
       >
+        {expanded
+          ? <DocumentEvents
+              onMouseDown={this.handleClickOutside}
+              onWheel={this.handleScroll}
+            />
+          : null}
         {expanded
           ? <MultiMenuWrapper
               expandDirection={expandDirection}

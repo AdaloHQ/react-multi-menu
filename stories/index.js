@@ -80,3 +80,16 @@ storiesOf('MultiMenuTrigger', module)
       </MultiMenuTrigger>
     </div>
   ))
+  .add('Preventing scrolling', () => (
+    <div>
+      <div style={{ ...styles, justifyContent: 'center' }}>
+        <MultiMenuTrigger
+          menu={menuData}
+          onSelect={action('Selected option')}
+        >
+          Click Me
+        </MultiMenuTrigger>
+      </div>
+      <div style={{ height: 900, marginTop: 20, backgroundColor: '#faa' }} />
+    </div>
+  ))
