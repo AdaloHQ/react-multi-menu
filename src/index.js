@@ -227,7 +227,19 @@ export class MultiMenuTrigger extends Component {
     }
   }
 
+  handleBlur = () => {
+    this.setState({ expanded: false })
+  }
+
   elementRef = el => this.element = el
+
+  componentWillMount() {
+    window.addEventListener('blur', this.handleBlur)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('blur', this.handleBlur)
+  }
 
   render() {
     let { children, menu } = this.props
