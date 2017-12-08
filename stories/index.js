@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
 
-import MultiMenu, { MultiSelectMenu, MultiMenuTrigger } from '../src'
+import MultiSelectMenu, { MultiMenuWrapper, MultiMenuTrigger } from '../src'
 import '../styles.css'
 
 const menuData = [
@@ -52,9 +52,9 @@ class MultiSelectWrapper extends Component {
   }
 }
 
-storiesOf('MultiMenu', module)
+storiesOf('MultiMenuWrapper', module)
   .add('basic', () => (
-    <MultiMenu
+    <MultiMenuWrapper
       menu={menuData}
       onSelect={action('Selected option')}
     />
@@ -69,10 +69,17 @@ storiesOf('MultiSelectMenu', module)
   ))
   .add('fixed-width wrapper', () => (
     <div style={{ width: 200 }}>
+      <p>
+        Hello, world!
+        Here's some text. And a <a href="#">link</a>.
+      </p>
       <MultiSelectWrapper
         options={menuData}
         onChange={action('Change value')}
       />
+      <p>
+        More text afterward to ensure proper formatting.
+      </p>
     </div>
   ))
   .add('fixed-width, expanding-left', () => (
@@ -109,6 +116,15 @@ storiesOf('MultiSelectMenu', module)
       </div>
     )
   })
+  .add('dark', () => (
+    <div style={{ width: 200 }}>
+      <MultiSelectWrapper
+        dark
+        options={menuData}
+        onChange={action('Change value')}
+      />
+    </div>
+  ))
 
 storiesOf('MultiMenuTrigger', module)
   .add('Aligned Left', () => (
@@ -162,5 +178,16 @@ storiesOf('MultiMenuTrigger', module)
         </MultiMenuTrigger>
       </div>
       <div style={{ height: 900, marginTop: 20, backgroundColor: '#faa' }} />
+    </div>
+  ))
+  .add('Dark', () => (
+    <div style={{ ...styles, justifyContent: 'center' }}>
+      <MultiMenuTrigger
+        dark
+        menu={menuData}
+        onSelect={action('Selected option')}
+      >
+        Click Me
+      </MultiMenuTrigger>
     </div>
   ))

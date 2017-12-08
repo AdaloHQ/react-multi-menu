@@ -40,9 +40,9 @@ const getByValue = (options, value, comparator=null) => {
   }
 }
 
-export class MultiSelectMenu extends Component {
+export default class MultiSelectMenu extends Component {
   render() {
-    let { comparator, onChange, options, value } = this.props
+    let { comparator, dark, onChange, options, value } = this.props
 
     let selectedOption = getByValue(options, value, comparator)
 
@@ -50,8 +50,9 @@ export class MultiSelectMenu extends Component {
 
     return (
       <MultiMenuTrigger
-        className="multi-select-menu"
         fitParent
+        className="multi-select-menu"
+        dark={dark}
         menu={options}
         onSelect={onChange}
       >
@@ -66,7 +67,7 @@ export class MultiSelectMenu extends Component {
   }
 }
 
-export default class MultiMenuWrapper extends Component {
+export class MultiMenuWrapper extends Component {
   static defaultProps = {
     expandDirection: RIGHT
   }
@@ -272,6 +273,10 @@ export class MultiMenuTrigger extends Component {
     this.setState({ expanded: false })
   }
 
+  handleClose = () => {
+    this.setState({ expanded: false })
+  }
+
   handleScroll = e => {
     e.preventDefault()
   }
@@ -297,14 +302,24 @@ export class MultiMenuTrigger extends Component {
   }
 
   render() {
-    let { children, className, menu } = this.props
+    let { children, className, dark, menu } = this.props
     let { expandDirection, expanded, position } = this.state
 
     return (
       <div
-        className={classNames('multi-menu-trigger', className, { expanded })}
+        className={classNames(
+          'multi-menu-trigger',
+          className,
+          { expanded, 'multi-menu-dark': dark }
+        )}
         ref={this.elementRef}
       >
+        {expanded
+          ? <div
+              className="multi-menu-trigger-close"
+              onMouseDown={this.handleClose}
+            />
+          : null}
         {expanded
           ? <DocumentEvents
               onMouseDown={this.handleClickOutside}

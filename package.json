@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src --out-dir lib --source-maps",
     "watch": "npm run compile -- --watch",
+    "compile:css": "postcss src/styles/styles.css -w -u autoprefixer precss -o styles.css",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -26,6 +27,9 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "postcss": "^6.0.14",
+    "postcss-cli": "^4.1.1",
+    "precss": "^2.0.0",
     "react-dom": "^16.1.1"
   }
 }
