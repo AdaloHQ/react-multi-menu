@@ -59,6 +59,9 @@ storiesOf('MultiMenuWrapper', module)
       onSelect={action('Selected option')}
     />
   ))
+  .add('no options', () => (
+    <MultiMenuWrapper />
+  ))
 
 storiesOf('MultiSelectMenu', module)
   .add('full-width', () => (
@@ -124,6 +127,11 @@ storiesOf('MultiSelectMenu', module)
         options={menuData}
         onChange={action('Change value')}
       />
+    </div>
+  ))
+  .add('with no options', () => (
+    <div style={{ width: 200 }}>
+      <MultiSelectWrapper placeholder="Nothing to select" />
     </div>
   ))
 

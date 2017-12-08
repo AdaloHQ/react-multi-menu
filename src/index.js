@@ -25,6 +25,8 @@ const stopPropagation = e => {
 const getByValue = (options, value, comparator=null) => {
   if (!comparator) { comparator = (a, b) => a === b }
 
+  if (!options) { return undefined }
+
   for (let opt of options) {
     if (!opt || !value) { continue }
 
@@ -143,16 +145,18 @@ export class MultiMenu extends Component {
 
     return (
       <div className="multi-menu" style={styles}>
-        {menu.map((itm, i) => (
-          <MenuItem
-            key={i}
-            data={itm}
-            onHover={onHover}
-            onSelect={onSelect}
-            openPath={openPath}
-            path={basePath.concat([i])}
-          />
-        ))}
+        {menu && menu.length > 0
+          ? menu.map((itm, i) => (
+              <MenuItem
+                key={i}
+                data={itm}
+                onHover={onHover}
+                onSelect={onSelect}
+                openPath={openPath}
+                path={basePath.concat([i])}
+              />
+            ))
+          : <div className="multi-menu-empty">Nothing Available</div>}
       </div>
     )
   }

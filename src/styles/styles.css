@@ -171,8 +171,12 @@
   display: none;
 }
 
-.multi-select-menu-placeholder {
+.multi-select-menu-placeholder, .multi-menu-empty {
   color: #9a9a9a;
+}
+
+.multi-menu-empty {
+  padding: 0 12px;
 }
 
 /* Dark theme */
