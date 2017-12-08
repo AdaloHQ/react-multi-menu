@@ -25,7 +25,7 @@
   background: #07f;
 }
 
-.multi-menu-item.has-children:after {
+.multi-menu-item.has-children:after, .multi-select-menu-expand-icon:before {
   content: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iN3B4IiBoZWlnaHQ9IjEycHgiIHZpZXdCb3g9IjAgMCA3IDEyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPCEtLSBHZW5lcmF0b3I6IFNrZXRjaCA0Ny4xICg0NTQyMikgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0+CiAgICA8dGl0bGU+UGF0aCAxMTwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxkZWZzPjwvZGVmcz4KICAgIDxnIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJEZXNrdG9wLUhEIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMTIyNS4wMDAwMDAsIC00MDQuMDAwMDAwKSIgc3Ryb2tlPSIjRkZGRkZGIj4KICAgICAgICAgICAgPGcgaWQ9IkFkZC1EYXRhLU1lbnUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwMjAuMDAwMDAwLCAzNzYuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICA8ZyBpZD0iQ3VycmVudC1Vc2VyLUhPdmVyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwgMTkuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICAgICAgPHBvbHlsaW5lIGlkPSJQYXRoLTExIiBwb2ludHM9IjIwNiAxMCAyMTEuMjUwNDA3IDE1LjE4NDY1ODQgMjA2IDIwLjQzNTA2NSI+PC9wb2x5bGluZT4KICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+');
   position: absolute;
   right: 8px;
@@ -33,6 +33,16 @@
 
   top: 50%;
   margin-top: -6px;
+}
+
+.multi-select-menu-expand-icon:before {
+  transform: rotate(90deg);
+  right: 16px;
+  transition: transform 0.1s;
+}
+
+.multi-menu-trigger.expanded .multi-select-menu-expand-icon:before {
+  transform: rotate(270deg);
 }
 
 .multi-menu-child {
@@ -92,4 +102,29 @@
 .multi-menu-spacer {
   margin: 10px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.multi-select-menu-selection {
+  background: #222;
+  color: #fff;
+  padding: 10px 35px 10px 12px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.multi-select-menu-value {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.multi-select-menu.expanded .multi-select-menu-selection {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.multi-select-menu.expanded > .multi-menu-wrapper > .multi-menu {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }

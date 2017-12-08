@@ -22,6 +22,50 @@ const stopPropagation = e => {
   e.stopPropagation()
 }
 
+const getByValue = (options, value, comparator=null) => {
+  if (!comparator) { comparator = (a, b) => a === b }
+
+  for (let opt of options) {
+    if (!opt || !value) { continue }
+
+    if (comparator(opt.value, value)) {
+      return opt
+    }
+
+    if (opt.children) {
+      let childResult = getByValue(opt.children, value)
+
+      if (childResult) { return childResult }
+    }
+  }
+}
+
+export class MultiSelectMenu extends Component {
+  render() {
+    let { comparator, onChange, options, value } = this.props
+
+    let selectedOption = getByValue(options, value, comparator)
+
+    let label = selectedOption ? selectedOption.label : 'Select...'
+
+    return (
+      <MultiMenuTrigger
+        className="multi-select-menu"
+        fitParent
+        menu={options}
+        onSelect={onChange}
+      >
+        <div className="multi-select-menu-selection">
+          <span className="multi-select-menu-value">
+            {label}
+          </span>
+          <span className="multi-select-menu-expand-icon" />
+        </div>
+      </MultiMenuTrigger>
+    )
+  }
+}
+
 export default class MultiMenuWrapper extends Component {
   static defaultProps = {
     expandDirection: RIGHT
@@ -51,6 +95,8 @@ export default class MultiMenuWrapper extends Component {
 
     let { openPath } = this.state
 
+    if (!position) { position = {} }
+
     return (
       <div
         className={classNames(
@@ -64,6 +110,7 @@ export default class MultiMenuWrapper extends Component {
           basePath={[]}
           menu={menu}
           openPath={openPath}
+          width={position.width}
           onHover={this.handleHover}
         />
       </div>
@@ -80,10 +127,13 @@ export class MultiMenu extends Component {
       onHover,
       onSelect,
       openPath,
+      width,
     } = this.props
 
+    let styles = { width }
+
     return (
-      <div className="multi-menu">
+      <div className="multi-menu" style={styles}>
         {menu.map((itm, i) => (
           <MenuItem
             key={i}
@@ -174,6 +224,8 @@ export class MultiMenuTrigger extends Component {
       return this.setState({ expanded: false })
     }
 
+    let { fitParent } = this.props
+
     let position = this.state.position
     let expandDirection = RIGHT
 
@@ -188,13 +240,16 @@ export class MultiMenuTrigger extends Component {
       }
 
       position = { top: rect.bottom + 8 }
+      let menuWidth = 180
 
-      if (center - 90 < 20) {
+      if (fitParent) {
+        position = { top: rect.bottom, left: rect.left, width: rect.width }
+      } else if (center - menuWidth / 2 < 20) {
         position.left = rect.left
-      } else if (center + 90 > windowWidth - 20) {
-        position.left = rect.right - 180
+      } else if (center + menuWidth / 2 > windowWidth - 20) {
+        position.left = rect.right - menuWidth
       } else {
-        position.left = center - 90
+        position.left = center - menuWidth / 2
       }
     }
 
@@ -242,12 +297,12 @@ export class MultiMenuTrigger extends Component {
   }
 
   render() {
-    let { children, menu } = this.props
+    let { children, className, menu } = this.props
     let { expandDirection, expanded, position } = this.state
 
     return (
       <div
-        className={classNames('multi-menu-trigger', { expanded })}
+        className={classNames('multi-menu-trigger', className, { expanded })}
         ref={this.elementRef}
       >
         {expanded

@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
 
-import MultiMenu, { MultiMenuTrigger } from '../src'
+import MultiMenu, { MultiSelectMenu, MultiMenuTrigger } from '../src'
 import '../styles.css'
 
 const menuData = [
@@ -31,6 +31,27 @@ const menuData = [
 
 const styles = { display: 'flex', flexDirection: 'row' }
 
+class MultiSelectWrapper extends Component {
+  state = { value: null }
+
+  handleChange = value => {
+    this.props.onChange(value)
+    this.setState({ value })
+  }
+
+  render() {
+    let { value } = this.state
+
+    return (
+      <MultiSelectMenu
+        {...this.props}
+        value={value}
+        onChange={this.handleChange}
+      />
+    )
+  }
+}
+
 storiesOf('MultiMenu', module)
   .add('basic', () => (
     <MultiMenu
@@ -38,6 +59,56 @@ storiesOf('MultiMenu', module)
       onSelect={action('Selected option')}
     />
   ))
+
+storiesOf('MultiSelectMenu', module)
+  .add('full-width', () => (
+    <MultiSelectWrapper
+      options={menuData}
+      onChange={action('Change value')}
+    />
+  ))
+  .add('fixed-width wrapper', () => (
+    <div style={{ width: 200 }}>
+      <MultiSelectWrapper
+        options={menuData}
+        onChange={action('Change value')}
+      />
+    </div>
+  ))
+  .add('fixed-width, expanding-left', () => (
+    <div style={{ width: 200, marginLeft: 'auto' }}>
+      <MultiSelectWrapper
+        options={menuData}
+        onChange={action('Change value')}
+      />
+    </div>
+  ))
+  .add('flex wrapper', () => (
+    <div style={{ ...styles, justifyContent: 'center' }}>
+      <MultiSelectWrapper
+        options={menuData}
+        onChange={action('Change value')}
+      />
+    </div>
+  ))
+  .add('with comparator', () => {
+    let options = [
+      { label: 'Option 1', value: { id: 1 } },
+      { label: 'Option 2', value: { id: 2 } },
+      { label: 'Option 3', value: { id: 3 } },
+      { label: 'Same as Option 3', value: { id: 3 } },
+    ]
+
+    return (
+      <div style={{ width: 200 }}>
+        <MultiSelectWrapper
+          options={options}
+          comparator={(val1, val2) => val1.id === val2.id}
+          onChange={action('Change value')}
+        />
+      </div>
+    )
+  })
 
 storiesOf('MultiMenuTrigger', module)
   .add('Aligned Left', () => (
