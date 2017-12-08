@@ -94,14 +94,6 @@ storiesOf('MultiSelectMenu', module)
       />
     </div>
   ))
-  .add('flex wrapper', () => (
-    <div style={{ ...styles, justifyContent: 'center' }}>
-      <MultiSelectWrapper
-        options={menuData}
-        onChange={action('Change value')}
-      />
-    </div>
-  ))
   .add('with comparator', () => {
     let options = [
       { label: 'Option 1', value: { id: 1 } },
