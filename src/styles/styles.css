@@ -171,6 +171,10 @@
   display: none;
 }
 
+.multi-select-menu-placeholder {
+  color: #9a9a9a;
+}
+
 /* Dark theme */
 
 .multi-menu-trigger.multi-menu-dark {

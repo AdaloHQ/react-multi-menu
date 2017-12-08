@@ -65,6 +65,7 @@ storiesOf('MultiSelectMenu', module)
     <MultiSelectWrapper
       options={menuData}
       onChange={action('Change value')}
+      placeholder="Select something from the list..."
     />
   ))
   .add('fixed-width wrapper', () => (

@@ -41,12 +41,20 @@ const getByValue = (options, value, comparator=null) => {
 }
 
 export default class MultiSelectMenu extends Component {
+  static defaultProps = {
+    placeholder: 'Select...'
+  }
+
   render() {
-    let { comparator, dark, onChange, options, value } = this.props
+    let { comparator, dark, onChange, options, placeholder, value } = this.props
 
     let selectedOption = getByValue(options, value, comparator)
 
-    let label = selectedOption ? selectedOption.label : 'Select...'
+    let label = selectedOption
+      ? selectedOption.label
+      : <span className="multi-select-menu-placeholder">
+          {placeholder}
+        </span>
 
     return (
       <MultiMenuTrigger
