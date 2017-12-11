@@ -202,6 +202,8 @@ export class MenuItem extends Component {
 
     e.stopPropagation()
 
+    if (data.disabled) { return }
+
     if (data && data.children && data.children.length) {
       onHover(path)
     } else {
@@ -216,6 +218,8 @@ export class MenuItem extends Component {
       return <MenuSpacer />
     }
 
+    let { disabled } = data
+
     let open = matches(openPath, path)
     let hasChildren = data.children && data.children.length > 0
 
@@ -223,7 +227,7 @@ export class MenuItem extends Component {
       <div
         className={classNames(
           'multi-menu-item',
-          { open, 'has-children': hasChildren }
+          { disabled, open, 'has-children': hasChildren }
         )}
         onMouseOver={this.handleHover}
       >
