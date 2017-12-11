@@ -8,6 +8,13 @@ const LEFT = 'left'
 const RIGHT = 'right'
 const ESC = 27
 
+const LEFT_ARROW = 37
+const UP_ARROW = 38
+const RIGHT_ARROW = 39
+const DOWN_ARROW = 40
+
+const ARROWS = [LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW]
+
 export const matches = (openPath, path) => {
   for (let i = 0; i < path.length; i += 1) {
     if (openPath[i] !== path[i]) {
@@ -94,6 +101,20 @@ export class MultiMenuWrapper extends Component {
     this.setState({ openPath })
   }
 
+  handleKeyDown = e => {
+    // Prevent arrow-triggered scrolling
+    if (ARROWS.indexOf(e.which) >= 0) {
+      e.preventDefault()
+    }
+
+    if (e.which === UP_ARROW) {
+      // console.log("GETTING PREVIOUS VALUE")
+    } else if (e.which === DOWN_ARROW) {
+      // console.log("GETTING NEXT VALUE")
+    }
+
+  }
+
   render() {
     let {
       align,
@@ -116,6 +137,9 @@ export class MultiMenuWrapper extends Component {
         )}
         style={position}
       >
+        <DocumentEvents
+          onKeyDown={this.handleKeyDown}
+        />
         <MultiMenu
           {...{ isSubMenu, onSelect }}
           basePath={[]}
