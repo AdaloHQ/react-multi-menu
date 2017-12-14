@@ -192,7 +192,7 @@ export class MenuItem extends Component {
   handleClick = e => {
     let { data: { value }, onSelect } = this.props
 
-    if (!onSelect) { return }
+    if (!onSelect || !value) { return }
 
     onSelect(value)
   }
@@ -222,12 +222,23 @@ export class MenuItem extends Component {
 
     let open = matches(openPath, path)
     let hasChildren = data.children && data.children.length > 0
+    let childrenOnly = false
+
+    if (!data.value) {
+      if (hasChildren) { childrenOnly = true }
+      else { disabled = true }
+    }
 
     return (
       <div
         className={classNames(
           'multi-menu-item',
-          { disabled, open, 'has-children': hasChildren }
+          {
+            disabled,
+            open,
+            'has-children': hasChildren,
+            'children-only': childrenOnly
+          }
         )}
         onMouseOver={this.handleHover}
       >

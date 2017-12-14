@@ -19,7 +19,6 @@ const menuData = [
       { label: 'Child 1 with a really long name', value: 'child1' },
       {
         label: 'Child 2',
-        value: 'child2',
         children: [
           { label: 'Sub-child 1', value: 'sc1' },
           { label: 'Sub-child 2', value: 'sc2' },

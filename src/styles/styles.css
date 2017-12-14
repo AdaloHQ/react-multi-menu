@@ -15,14 +15,7 @@
 .multi-menu-item {
   position: relative;
   padding-right: 20px;
-}
-
-.multi-menu-item-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  padding: 4px 0 4px 12px;
+  user-select: none;
 }
 
 .multi-menu-item.open, .multi-menu-item:hover {
@@ -54,6 +47,18 @@
   line-height: 12px;
   top: 50%;
   margin-top: -6px;
+}
+
+.multi-menu-item-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  padding: 4px 0 4px 12px;
+}
+
+.multi-menu-item.children-only > .multi-menu-item-label {
+  cursor: default;
 }
 
 .multi-select-menu-expand-icon:before {
