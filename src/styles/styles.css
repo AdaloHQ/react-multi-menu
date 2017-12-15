@@ -25,6 +25,12 @@
   &.has-children:after {
     background: #fff;
   }
+
+  > .multi-menu-item-label {
+    > .multi-menu-item-subtitle {
+      color: #fff;
+    }
+  }
 }
 
 .multi-menu-item.disabled {
