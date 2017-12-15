@@ -224,7 +224,7 @@ export class MenuItem extends Component {
     let hasChildren = data.children && data.children.length > 0
     let childrenOnly = false
 
-    if (!data.value) {
+    if (data.value === undefined) {
       if (hasChildren) { childrenOnly = true }
       else { disabled = true }
     }
