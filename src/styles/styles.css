@@ -55,6 +55,13 @@
   text-overflow: ellipsis;
   cursor: pointer;
   padding: 4px 0 4px 12px;
+
+  > .multi-menu-item-subtitle {
+    font-size: 0.8em;
+    color: #959595;
+    font-style: italic;
+    margin-left: 0.5em;
+  }
 }
 
 .multi-menu-item.children-only > .multi-menu-item-label {

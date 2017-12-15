@@ -9,12 +9,13 @@ import '../styles.css'
 
 const menuData = [
   { label: 'Item 1', value: 'item1' },
-  { label: 'Item 2', value: 'item2', disabled: true },
+  { label: 'Item 2', value: 'item2', subtitle: 'Disabled', disabled: true },
   null,
   { label: 'Item 3', value: 'item3' },
   {
     label: 'Item 4',
     value: 'item4',
+    subtitle: 'With Children',
     children: [
       { label: 'Child 1 with a really long name', value: 'child1' },
       {

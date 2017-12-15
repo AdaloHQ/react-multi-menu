@@ -248,6 +248,11 @@ export class MenuItem extends Component {
           title={data.label}
         >
           {data.label}
+          {data.subtitle
+            ? <span className="multi-menu-item-subtitle">
+                {data.subtitle}
+              </span>
+            : null}
         </div>
         {open && hasChildren
           ? <div
