@@ -192,7 +192,7 @@ export class MenuItem extends Component {
   handleClick = e => {
     let { data: { value }, onSelect } = this.props
 
-    if (!onSelect || !value) { return }
+    if (!onSelect || value === undefined) { return }
 
     onSelect(value)
   }
