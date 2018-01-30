@@ -55,7 +55,15 @@ export default class MultiSelectMenu extends Component {
   }
 
   render() {
-    let { comparator, dark, onChange, options, placeholder, value } = this.props
+    let {
+      className,
+      comparator,
+      dark,
+      onChange,
+      options,
+      placeholder,
+      value
+    } = this.props
 
     let selectedOption = getByValue(options, value, comparator)
 
@@ -68,7 +76,7 @@ export default class MultiSelectMenu extends Component {
     return (
       <MultiMenuTrigger
         fitParent
-        className="multi-select-menu"
+        className={classNames('multi-select-menu', className)}
         dark={dark}
         menu={options}
         onSelect={onChange}

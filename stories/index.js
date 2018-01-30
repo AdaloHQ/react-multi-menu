@@ -66,6 +66,7 @@ storiesOf('MultiMenuWrapper', module)
 storiesOf('MultiSelectMenu', module)
   .add('full-width', () => (
     <MultiSelectWrapper
+      className="test-select-menu"
       options={menuData}
       onChange={action('Change value')}
       placeholder="Select something from the list..."
