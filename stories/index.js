@@ -193,3 +193,62 @@ storiesOf('MultiMenuTrigger', module)
       </MultiMenuTrigger>
     </div>
   ))
+
+
+// ASYNC
+
+storiesOf('MultiSelectMenu async', module)
+  .add('Simple', () => {
+    let getLabel = val => val && `Item #${val}`
+
+    let getOptions = () => [
+      {
+        label: 'Item #1',
+        value: 1,
+        children: [
+          { label: 'Item #2', value: 2 },
+          { label: 'Item #3', value: 3 }
+        ]
+      }
+    ]
+
+    return (
+      <div style={{ width: 200 }}>
+        <MultiSelectWrapper
+          className="test-select-menu"
+          options={getOptions}
+          getLabel={getLabel}
+          onChange={action('Selected option')}
+          placeholder="Select..."
+        />
+      </div>
+    )
+  })
+  .add('Infinite', () => {
+    let getLabel = val => val && `Item #${val}`
+
+    let getOptions = () => {
+      let value = 1
+
+      return [
+        {
+          label: getLabel(value),
+          value: value,
+          children: getOptions
+        }
+      ]
+    }
+
+    return (
+      <div style={{ width: 200 }}>
+        <MultiSelectWrapper
+          className="test-select-menu"
+          options={getOptions}
+          getLabel={getLabel}
+          onChange={action('Selected option')}
+          placeholder="Select..."
+        />
+      </div>
+    )
+  })
+

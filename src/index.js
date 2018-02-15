@@ -54,24 +54,51 @@ export default class MultiSelectMenu extends Component {
     placeholder: 'Select...'
   }
 
+  getLabel() {
+    let {
+      value,
+      options,
+      getLabel,
+      placeholder,
+      comparator
+    } = this.props
+
+    let label = null
+
+    if (typeof options === 'function' && !getLabel) {
+      console.error(
+        'Warning: if options is a function, getLabel must also be provided')
+    }
+
+    if (getLabel) {
+      label = getLabel(value)
+    } else if (Array.isArray(options)) {
+      let selectedOption = getByValue(options, value, comparator)
+
+      if (selectedOption) { label = selectedOption.label }
+    }
+
+    if (!label) {
+      return (
+        <span className="multi-select-menu-placeholder">
+          {placeholder}
+        </span>
+      )
+    }
+
+    return label
+  }
+
   render() {
     let {
       className,
       comparator,
       dark,
       onChange,
-      options,
-      placeholder,
-      value
+      options
     } = this.props
 
-    let selectedOption = getByValue(options, value, comparator)
-
-    let label = selectedOption
-      ? selectedOption.label
-      : <span className="multi-select-menu-placeholder">
-          {placeholder}
-        </span>
+    let label = this.getLabel()
 
     return (
       <MultiMenuTrigger
@@ -175,6 +202,10 @@ export class MultiMenu extends Component {
 
     let styles = { width }
 
+    if (typeof menu === 'function') {
+      menu = menu()
+    }
+
     return (
       <div className="multi-menu" style={styles}>
         {menu && menu.length > 0
@@ -205,6 +236,18 @@ export class MenuItem extends Component {
     onSelect(value)
   }
 
+  hasChildren = () => {
+    let { data } = this.props
+
+    let { children } = data
+
+    if (typeof children === 'function') {
+      children = children()
+    }
+
+    return children && children.length > 0
+  }
+
   handleHover = e => {
     let { data, path, onHover } = this.props
 
@@ -212,7 +255,7 @@ export class MenuItem extends Component {
 
     if (data.disabled) { return }
 
-    if (data && data.children && data.children.length) {
+    if (this.hasChildren()) {
       onHover(path)
     } else {
       onHover(path.slice(0, path.length - 1))
@@ -229,7 +272,8 @@ export class MenuItem extends Component {
     let { disabled } = data
 
     let open = matches(openPath, path)
-    let hasChildren = data.children && data.children.length > 0
+    let hasChildren = this.hasChildren()
+
     let childrenOnly = false
 
     if (data.value === undefined) {
