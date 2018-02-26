@@ -169,6 +169,11 @@
   height: calc(1.2em + 20px);
 }
 
+.multi-select-menu.multi-menu-trigger.expanded:before,
+.multi-select-menu.multi-menu-trigger.expanded:after {
+  display: none;
+}
+
 .multi-select-menu-selection {
   background: #f5f5f5;
   color: #444;
@@ -202,6 +207,7 @@
 .multi-select-menu.expanded > .multi-menu-wrapper > .multi-menu {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  margin-top: -1px;
 }
 
 .multi-select-menu.multi-menu-trigger.expanded:after {
