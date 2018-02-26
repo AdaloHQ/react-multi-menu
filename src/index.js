@@ -27,6 +27,7 @@ export const matches = (openPath, path) => {
 
 const stopPropagation = e => {
   e.stopPropagation()
+  e.preventDefault()
 }
 
 const getByValue = (options, value, comparator=null) => {

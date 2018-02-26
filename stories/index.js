@@ -183,7 +183,9 @@ storiesOf('MultiMenuTrigger', module)
     </div>
   ))
   .add('Stops event propagation', () => (
-    <div
+    <a
+      href="http://google.com"
+      target="_blank"
       style={{
         background: '#ff0',
         padding: 60,
@@ -199,7 +201,7 @@ storiesOf('MultiMenuTrigger', module)
       >
         Click Me
       </MultiMenuTrigger>
-    </div>
+    </a>
   ))
   .add('Dark', () => (
     <div style={{ ...styles, justifyContent: 'center' }}>
