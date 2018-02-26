@@ -12,6 +12,7 @@ const menuData = [
   { label: 'Item 2', value: 'item2', subtitle: 'Disabled', disabled: true },
   null,
   { label: 'Item 3', value: 'item3' },
+  { label: 'Item with action', onClick: action('Click action') },
   {
     label: 'Item 4',
     value: 'item4',

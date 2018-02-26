@@ -230,9 +230,13 @@ export const MenuSpacer = () => (<div className="multi-menu-spacer" />)
 
 export class MenuItem extends Component {
   handleClick = e => {
-    let { data: { value }, onSelect } = this.props
+    let { data: { value, onClick }, onSelect } = this.props
 
-    if (!onSelect || value === undefined) { return }
+    if (onClick) {
+      onClick()
+    }
+
+    if (!onSelect || (value === undefined && !onClick)) { return }
 
     onSelect(value)
   }
@@ -274,12 +278,13 @@ export class MenuItem extends Component {
 
     let open = matches(openPath, path)
     let hasChildren = this.hasChildren()
+    let clickAction = data.onClick
 
     let childrenOnly = false
 
     if (data.value === undefined) {
       if (hasChildren) { childrenOnly = true }
-      else { disabled = true }
+      else if (!clickAction) { disabled = true }
     }
 
     return (
