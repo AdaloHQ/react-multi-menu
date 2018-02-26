@@ -329,6 +329,8 @@ export class MultiMenuTrigger extends Component {
   state = { expanded: false, position: null, expandDirection: null }
 
   handleClick = e => {
+    e.stopPropagation()
+
     if (this.state.expanded) {
       return this.setState({ expanded: false })
     }
@@ -421,6 +423,10 @@ export class MultiMenuTrigger extends Component {
           { expanded, 'multi-menu-dark': dark }
         )}
         ref={this.elementRef}
+        onClick={stopPropagation}
+        onMouseDown={stopPropagation}
+        onDoubleClick={stopPropagation}
+        onMouseUp={stopPropagation}
       >
         {expanded
           ? <div
@@ -443,7 +449,10 @@ export class MultiMenuTrigger extends Component {
               position={position}
             />
           : null}
-        <div className="multi-menu-trigger-element" onMouseDown={this.handleClick}>
+        <div
+          className="multi-menu-trigger-element"
+          onMouseDown={this.handleClick}
+        >
           {children}
         </div>
       </div>

@@ -182,6 +182,25 @@ storiesOf('MultiMenuTrigger', module)
       <div style={{ height: 900, marginTop: 20, backgroundColor: '#faa' }} />
     </div>
   ))
+  .add('Stops event propagation', () => (
+    <div
+      style={{
+        background: '#ff0',
+        padding: 60,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+      }}
+      onClick={action('Clicked outside')}
+    >
+      <MultiMenuTrigger
+        menu={menuData}
+        onSelect={action('Selected option')}
+      >
+        Click Me
+      </MultiMenuTrigger>
+    </div>
+  ))
   .add('Dark', () => (
     <div style={{ ...styles, justifyContent: 'center' }}>
       <MultiMenuTrigger
