@@ -106,6 +106,7 @@
   position: relative;
 }
 
+.multi-menu-trigger.expanded:before,
 .multi-menu-trigger.expanded:after {
   content: '';
   display: block;
@@ -113,10 +114,18 @@
   left: 50%;
   top: 100%;
   margin-top: 3px;
+  margin-left: -5px;
   border: 5px solid transparent;
   border-top: none;
   border-bottom-color: #f5f5f5;
   z-index: 99999;
+}
+
+.multi-menu-trigger.expanded:before {
+  border-width: 6px;
+  border-bottom-color: rgba(0, 0, 0, 0.15);
+  margin-top: 2px;
+  margin-left: -6px;
 }
 
 .multi-menu-trigger > .multi-menu-wrapper {
