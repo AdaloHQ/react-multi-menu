@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import deepEqual from 'deep-equal'
 
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
@@ -98,17 +99,25 @@ storiesOf('MultiSelectMenu', module)
   ))
   .add('with comparator', () => {
     let options = [
-      { label: 'Option 1', value: { id: 1 } },
+      { label: 'Option 1 (text)', value: 'hello' },
       { label: 'Option 2', value: { id: 2 } },
       { label: 'Option 3', value: { id: 3 } },
       { label: 'Same as Option 3', value: { id: 3 } },
+      {
+        label: 'Nested options',
+        children: [
+          { label: 'Option 4', value: { id: 4 } },
+          { label: 'Option 3 again', value: { id: 3 } },
+          { label: 'Text Option', value: 'Hello again?' },
+        ]
+      }
     ]
 
     return (
       <div style={{ width: 200 }}>
         <MultiSelectWrapper
           options={options}
-          comparator={(val1, val2) => val1.id === val2.id}
+          comparator={deepEqual}
           onChange={action('Change value')}
         />
       </div>

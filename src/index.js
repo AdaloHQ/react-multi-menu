@@ -30,6 +30,7 @@ const stopPropagation = e => {
   e.preventDefault()
 }
 
+// Implements depth first search to find current value
 const getByValue = (options, value, comparator=null) => {
   if (!comparator) { comparator = (a, b) => a === b }
 
@@ -43,7 +44,7 @@ const getByValue = (options, value, comparator=null) => {
     }
 
     if (opt.children) {
-      let childResult = getByValue(opt.children, value)
+      let childResult = getByValue(opt.children, value, comparator)
 
       if (childResult) { return childResult }
     }
