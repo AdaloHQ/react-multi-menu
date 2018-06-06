@@ -19,7 +19,8 @@
     "react-document-events": "^1.3.2"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": ">=16",
+    "react-dom": ">=16"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.2.16",

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 import DocumentEvents from 'react-document-events'
 
@@ -97,6 +98,7 @@ export default class MultiSelectMenu extends Component {
   render() {
     let {
       className,
+      menuClassName,
       comparator,
       dark,
       onChange,
@@ -108,10 +110,12 @@ export default class MultiSelectMenu extends Component {
     return (
       <MultiMenuTrigger
         fitParent
+        isStyledMenu
         className={classNames('multi-select-menu', className)}
         dark={dark}
         menu={options}
         onSelect={onChange}
+        menuClassName={menuClassName}
       >
         <div className="multi-select-menu-selection">
           <span className="multi-select-menu-value">
@@ -162,7 +166,9 @@ export class MultiMenuWrapper extends Component {
       isSubMenu,
       menu,
       onSelect,
-      position
+      position,
+      isStyledMenu,
+      className,
     } = this.props
 
     let { openPath } = this.state
@@ -175,7 +181,9 @@ export class MultiMenuWrapper extends Component {
       <div
         className={classNames(
           'multi-menu-wrapper',
-          `expand-${expandDirection}`
+          `expand-${expandDirection}`,
+          className,
+          { 'multi-menu-wrapper-attached': isStyledMenu }
         )}
         style={position}
       >
@@ -211,6 +219,8 @@ export class MultiMenu extends Component {
     if (openIndex === undefined) { return null }
 
     let openMenu = menu[openIndex] && menu[openIndex].children
+
+    if (typeof openMenu === 'function') { openMenu = openMenu() }
 
     let windowHeight = window.innerHeight
     let scrollTop = this._el.scrollTop
@@ -485,7 +495,15 @@ export class MultiMenuTrigger extends Component {
   }
 
   render() {
-    let { children, className, dark, menu } = this.props
+    let {
+      children,
+      className,
+      menuClassName,
+      dark,
+      menu,
+      isStyledMenu
+    } = this.props
+
     let { expandDirection, expanded, position } = this.state
 
     return (
@@ -502,25 +520,26 @@ export class MultiMenuTrigger extends Component {
         onMouseUp={stopPropagation}
       >
         {expanded
-          ? <div
-              className="multi-menu-trigger-close"
-              onMouseDown={this.handleClose}
-            />
-          : null}
-        {expanded
           ? <DocumentEvents
-              onMouseDown={this.handleClickOutside}
               onWheel={this.handleScroll}
               onKeyDown={this.handleKeyDown}
             />
           : null}
         {expanded
-          ? <MultiMenuWrapper
-              expandDirection={expandDirection}
-              menu={menu}
-              onSelect={this.handleSelect}
-              position={position}
-            />
+          ? <MenuPortal>
+              <div
+                className="multi-menu-trigger-close"
+                onMouseDown={this.handleClose}
+              />
+              <MultiMenuWrapper
+                isStyledMenu={isStyledMenu}
+                expandDirection={expandDirection}
+                menu={menu}
+                onSelect={this.handleSelect}
+                position={position}
+                className={menuClassName}
+              />
+            </MenuPortal>
           : null}
         <div
           className="multi-menu-trigger-element"
@@ -530,5 +549,37 @@ export class MultiMenuTrigger extends Component {
         </div>
       </div>
     )
+  }
+}
+
+class MenuPortal extends Component {
+  getNode() {
+    if (!this._node) {
+      this._node = document.createElement('div')
+      this._node.className = 'multi-menu-container'
+      document.body.appendChild(this._node)
+    }
+
+    return this._node
+  }
+
+  componentWillUnmount() {
+    window.setTimeout(() => {
+      // Remove node if exists
+      if (!this._node) { return }
+
+      document.body.removeChild(this._node)
+      this._node = null
+    }, 0)
+  }
+
+  render() {
+    let { children } = this.props
+
+    return ReactDOM.createPortal((
+      <React.Fragment>
+        {children}
+      </React.Fragment>
+    ), this.getNode())
   }
 }
