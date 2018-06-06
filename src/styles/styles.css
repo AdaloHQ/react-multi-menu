@@ -6,6 +6,13 @@
   color: #444;
   text-align: left;
   font-size: 1em;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.multi-menu-inner-wrapper {
+  position: relative;
+  width: 180px;
 }
 
 .multi-menu, .multi-select-menu.expanded {
@@ -204,7 +211,7 @@
   border-bottom-right-radius: 0;
 }
 
-.multi-select-menu.expanded > .multi-menu-wrapper > .multi-menu {
+.multi-select-menu.expanded > .multi-menu-wrapper > .multi-menu-inner-wrapper > .multi-menu {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   margin-top: -1px;

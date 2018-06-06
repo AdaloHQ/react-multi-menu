@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import DocumentEvents from 'react-document-events'
 
 import { isDescendent } from './dom'
+import { getMenuHeight, getMenuItemOffset } from './sizing'
 
 const LEFT = 'left'
 const RIGHT = 'right'
@@ -14,6 +15,8 @@ const RIGHT_ARROW = 39
 const DOWN_ARROW = 40
 
 const ARROWS = [LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW]
+
+const WINDOW_PAD = 16
 
 export const matches = (openPath, path) => {
   for (let i = 0; i < path.length; i += 1) {
@@ -164,7 +167,9 @@ export class MultiMenuWrapper extends Component {
 
     let { openPath } = this.state
 
-    if (!position) { position = {} }
+    if (!position) { position = { top: WINDOW_PAD } }
+
+    let maxHeight = window.innerHeight - position.top - WINDOW_PAD
 
     return (
       <div
@@ -184,6 +189,7 @@ export class MultiMenuWrapper extends Component {
           openPath={openPath}
           width={position.width}
           onHover={this.handleHover}
+          maxHeight={maxHeight}
         />
       </div>
     )
@@ -191,6 +197,67 @@ export class MultiMenuWrapper extends Component {
 }
 
 export class MultiMenu extends Component {
+  renderOpenMenu = menu => {
+    if (!this._el) { return null }
+
+    let { basePath, openPath, onHover, onSelect } = this.props
+
+    let openIndex
+
+    if (matches(openPath, basePath)) {
+      openIndex = openPath[basePath.length]
+    }
+
+    if (openIndex === undefined) { return null }
+
+    let openMenu = menu[openIndex] && menu[openIndex].children
+
+    let windowHeight = window.innerHeight
+    let scrollTop = this._el.scrollTop
+    let offsetTop = this._el.getBoundingClientRect().top
+    let calculatedHeight = getMenuHeight(openMenu)
+    let currentItemOffset = getMenuItemOffset(menu, openIndex)
+    let positionTop = currentItemOffset - scrollTop
+    let currentOpenPath = basePath.concat([openIndex])
+    let maxHeight = windowHeight - (offsetTop + positionTop) - WINDOW_PAD
+
+    if (maxHeight < calculatedHeight) {
+      let diff = calculatedHeight - maxHeight
+      let maxDiff = windowHeight - maxHeight - 2 * WINDOW_PAD
+
+      diff = Math.min(diff, maxDiff)
+
+      maxHeight += diff
+      positionTop -= diff - 8
+    }
+
+    return (
+      <div
+        className="multi-menu-child"
+        onMouseOver={stopPropagation}
+        style={{ top: positionTop }}
+      >
+        <MultiMenu
+          basePath={currentOpenPath}
+          menu={openMenu}
+          onHover={onHover}
+          onSelect={onSelect}
+          openPath={openPath}
+          maxHeight={maxHeight}
+        />
+      </div>
+    )
+  }
+
+  handleScroll = e => {
+    e.nativeEvent.stopImmediatePropagation()
+    e.stopPropagation()
+  }
+
+  menuRef = el => {
+    this._el = el
+  }
+
   render() {
     let {
       basePath,
@@ -200,28 +267,37 @@ export class MultiMenu extends Component {
       onSelect,
       openPath,
       width,
+      maxHeight,
     } = this.props
 
-    let styles = { width }
+    let styles = { width, maxHeight }
 
     if (typeof menu === 'function') {
       menu = menu()
     }
 
     return (
-      <div className="multi-menu" style={styles}>
-        {menu && menu.length > 0
-          ? menu.map((itm, i) => (
-              <MenuItem
-                key={i}
-                data={itm}
-                onHover={onHover}
-                onSelect={onSelect}
-                openPath={openPath}
-                path={basePath.concat([i])}
-              />
-            ))
-          : <div className="multi-menu-empty">Nothing Available</div>}
+      <div className="multi-menu-inner-wrapper" style={styles}>
+        <div
+          className="multi-menu"
+          style={styles}
+          onWheel={this.handleScroll}
+          ref={this.menuRef}
+        >
+          {menu && menu.length > 0
+            ? menu.map((itm, i) => (
+                <MenuItem
+                  key={i}
+                  data={itm}
+                  onHover={onHover}
+                  onSelect={onSelect}
+                  openPath={openPath}
+                  path={basePath.concat([i])}
+                />
+              ))
+            : <div className="multi-menu-empty">Nothing Available</div>}
+        </div>
+        {this.renderOpenMenu(menu)}
       </div>
     )
   }
@@ -313,27 +389,17 @@ export class MenuItem extends Component {
               </span>
             : null}
         </div>
-        {open && hasChildren
-          ? <div
-              className="multi-menu-child"
-              onMouseOver={stopPropagation}
-            >
-              <MultiMenu
-                basePath={path}
-                menu={data.children}
-                onHover={onHover}
-                onSelect={onSelect}
-                openPath={openPath}
-              />
-            </div>
-          : null}
       </div>
     )
   }
 }
 
 export class MultiMenuTrigger extends Component {
-  state = { expanded: false, position: null, expandDirection: null }
+  state = {
+    expanded: false,
+    position: null,
+    expandDirection: null,
+  }
 
   handleClick = e => {
     e.stopPropagation()

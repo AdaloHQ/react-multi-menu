@@ -25,6 +25,18 @@ const menuData = [
         children: [
           { label: 'Sub-child 1', value: 'sc1' },
           { label: 'Sub-child 2', value: 'sc2' },
+          { label: 'Sub-child 3', value: 'sc3' },
+          { label: 'Sub-child 4', value: 'sc4' },
+          { label: 'Sub-child 5', value: 'sc5' },
+          { label: 'Sub-child 6', value: 'sc6' },
+          { label: 'Sub-child 7', value: 'sc7' },
+          { label: 'Sub-child 8', value: 'sc8' },
+          { label: 'Sub-child 9', value: 'sc9' },
+          { label: 'Sub-child 10', value: 'sc10' },
+          { label: 'Sub-child 11', value: 'sc11' },
+          { label: 'Sub-child 12', value: 'sc12' },
+          { label: 'Sub-child 1', value: 'sc1' },
+          { label: 'Sub-child 2', value: 'sc2' },
         ]
       }
     ]
