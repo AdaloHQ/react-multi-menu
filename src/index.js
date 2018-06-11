@@ -318,7 +318,6 @@ export class MultiMenu extends Component {
   evaluateMenu = (props = null) => {
     let { menu } = props || this.props
 
-    console.log('EVALUATING...', menu)
     if (typeof menu === 'function') {
       this._evaluatedMenu = menu()
     } else {
