@@ -205,10 +205,21 @@ export class MultiMenuWrapper extends Component {
 }
 
 export class MultiMenu extends Component {
-  renderOpenMenu = menu => {
+  state = {
+    overflowBefore: false,
+    overflowAfter: false,
+  }
+
+  constructor(props) {
+    super(props)
+    this.evaluateMenu(props)
+  }
+
+  renderOpenMenu = () => {
     if (!this._el) { return null }
 
     let { basePath, openPath, onHover, onSelect } = this.props
+    let menu = this.getMenu()
 
     let openIndex
 
@@ -262,17 +273,75 @@ export class MultiMenu extends Component {
   handleScroll = e => {
     e.nativeEvent.stopImmediatePropagation()
     e.stopPropagation()
+
+    this.setOverflow()
+  }
+
+  handleOverflowScroll = amount => {
+    if (!this._el) { return }
+
+    this._el.scrollTop += amount
+
+    this.setOverflow()
   }
 
   menuRef = el => {
     this._el = el
   }
 
+  setOverflow = () => {
+    let { maxHeight } = this.props
+    let menu = this.getMenu()
+    let calculatedHeight = getMenuHeight(menu)
+
+    if (!this._el) { return }
+
+    let scrollOffset = this._el.scrollTop
+    let overflowBefore = scrollOffset > 10
+    let overflowAfter = calculatedHeight - scrollOffset > maxHeight + 10
+
+    if (overflowBefore !== this.state.overflowBefore ||
+        overflowAfter !== this.state.overflowAfter) {
+
+      this.setState({ overflowBefore, overflowAfter })
+    }
+  }
+
+  componentDidMount() {
+    this.setOverflow()
+  }
+
+  componentDidUpdate() {
+    this.setOverflow()
+  }
+
+  evaluateMenu = (props = null) => {
+    let { menu } = props || this.props
+
+    console.log('EVALUATING...', menu)
+    if (typeof menu === 'function') {
+      this._evaluatedMenu = menu()
+    } else {
+      this._evaluatedMenu = menu
+    }
+  }
+
+  getMenu = () => {
+    return this._evaluatedMenu
+  }
+
+  shouldComponentUpdate(newProps) {
+    if (newProps.menu !== this.props.menu) {
+      this.evaluateMenu(newProps)
+    }
+
+    return true
+  }
+
   render() {
     let {
       basePath,
       isSubMenu,
-      menu,
       onHover,
       onSelect,
       openPath,
@@ -280,34 +349,86 @@ export class MultiMenu extends Component {
       maxHeight,
     } = this.props
 
-    let styles = { width, maxHeight }
+    let menu = this.getMenu()
 
-    if (typeof menu === 'function') {
-      menu = menu()
-    }
+    let { overflowBefore, overflowAfter } = this.state
+
+    let styles = { width, maxHeight }
 
     return (
       <div className="multi-menu-inner-wrapper" style={styles}>
         <div
-          className="multi-menu"
+          className={classNames('multi-menu', {
+            'multi-menu-overflow-before': overflowBefore,
+            'multi-menu-overflow-after': overflowAfter,
+          })}
           style={styles}
           onWheel={this.handleScroll}
-          ref={this.menuRef}
         >
-          {menu && menu.length > 0
-            ? menu.map((itm, i) => (
-                <MenuItem
-                  key={i}
-                  data={itm}
-                  onHover={onHover}
-                  onSelect={onSelect}
-                  openPath={openPath}
-                  path={basePath.concat([i])}
-                />
-              ))
-            : <div className="multi-menu-empty">Nothing Available</div>}
+          <div
+            className="multi-menu-scroll-container"
+            style={styles}
+            ref={this.menuRef}
+          >
+            {menu && menu.length > 0
+              ? menu.map((itm, i) => (
+                  <MenuItem
+                    key={i}
+                    data={itm}
+                    onHover={onHover}
+                    onSelect={onSelect}
+                    openPath={openPath}
+                    path={basePath.concat([i])}
+                  />
+                ))
+              : <div className="multi-menu-empty">Nothing Available</div>}
+          </div>
+          {overflowBefore
+            ? <OverflowControl direction="up" onScroll={this.handleOverflowScroll} />
+            : null}
+          {overflowAfter
+            ? <OverflowControl direction="down" onScroll={this.handleOverflowScroll} />
+            : null}
         </div>
-        {this.renderOpenMenu(menu)}
+        {this.renderOpenMenu()}
+      </div>
+    )
+  }
+}
+
+export class OverflowControl extends Component {
+  scrollAction = () => {
+    let { direction, onScroll } = this.props
+    let amount = direction === 'up' ? -6 : 6
+
+    onScroll(amount)
+  }
+
+  handleMouseLeave = () => {
+    window.clearInterval(this._timer)
+  }
+
+  handleMouseEnter = () => {
+    this._timer = window.setInterval(this.scrollAction, 20)
+  }
+
+  componentWillUnmount() {
+    this.handleMouseLeave()
+  }
+
+  render() {
+    let { direction } = this.props
+
+    return (
+      <div
+        className={classNames(
+          'multi-menu-overflow',
+          `multi-menu-overflow-${direction}`
+        )}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
+        <div className="multi-menu-overflow-icon" />
       </div>
     )
   }
