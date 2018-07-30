@@ -38,7 +38,7 @@ const stopPropagation = e => {
 const getByValue = (options, value, comparator=null) => {
   if (!comparator) { comparator = (a, b) => a === b }
 
-  if (!options) { return undefined }
+  if (!options || typeof options !== 'object') { return undefined }
 
   for (let opt of options) {
     if (!opt || !value) { continue }
