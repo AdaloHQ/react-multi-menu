@@ -8,6 +8,8 @@ import { getMenuHeight, getMenuItemOffset } from './sizing'
 
 const LEFT = 'left'
 const RIGHT = 'right'
+const EXPAND_UP = 'up'
+const EXPAND_DOWN = 'down'
 const ESC = 27
 
 const LEFT_ARROW = 37
@@ -57,7 +59,8 @@ const getByValue = (options, value, comparator = null) => {
 
 export default class MultiSelectMenu extends Component {
   static defaultProps = {
-    placeholder: 'Select...'
+    placeholder: 'Select...',
+    options: [],
   }
 
   getLabel() {
@@ -130,7 +133,8 @@ export default class MultiSelectMenu extends Component {
 
 export class MultiMenuWrapper extends Component {
   static defaultProps = {
-    expandDirection: RIGHT
+    expandDirection: RIGHT,
+    verticalExpand: EXPAND_DOWN,
   }
 
   constructor(props) {
@@ -169,19 +173,29 @@ export class MultiMenuWrapper extends Component {
       position,
       isStyledMenu,
       className,
+      verticalExpand,
     } = this.props
+
+    console.log('VERTICAL EXPAND:', verticalExpand)
 
     let { openPath } = this.state
 
     if (!position) { position = { top: WINDOW_PAD } }
 
-    let maxHeight = window.innerHeight - position.top - WINDOW_PAD
+    let maxHeight
+
+    if (verticalExpand === EXPAND_UP) {
+      maxHeight = window.innerHeight - position.bottom - WINDOW_PAD
+    } else {
+      maxHeight = window.innerHeight - position.top - WINDOW_PAD
+    }
 
     return (
       <div
         className={classNames(
           'multi-menu-wrapper',
           `expand-${expandDirection}`,
+          `expand-${verticalExpand}`,
           className,
           { 'multi-menu-wrapper-attached': isStyledMenu }
         )}
@@ -529,6 +543,7 @@ export class MultiMenuTrigger extends Component {
     expanded: false,
     position: null,
     expandDirection: null,
+    verticalExpand: EXPAND_DOWN,
   }
 
   handleClick = e => {
@@ -542,10 +557,12 @@ export class MultiMenuTrigger extends Component {
 
     let position = this.state.position
     let expandDirection = RIGHT
+    let verticalExpand = EXPAND_DOWN
 
     if (this.element) {
       let rect = this.element.getBoundingClientRect()
       let windowWidth = window.innerWidth
+      let windowHeight = window.innerHeight
 
       let center = (rect.left + rect.right) / 2
 
@@ -553,11 +570,26 @@ export class MultiMenuTrigger extends Component {
         expandDirection = LEFT
       }
 
-      position = { top: rect.bottom + 8 }
+      let verticalCenter = (rect.top + rect.bottom) / 2
+
+      if (verticalCenter * 2 > windowHeight) {
+        verticalExpand = EXPAND_UP
+      }
+
+      if (verticalExpand === EXPAND_UP) {
+        position = { bottom: windowHeight - rect.top + 8 }
+      } else {
+        position = { top: rect.bottom + 8 }
+      }
+
       let menuWidth = 180
 
       if (fitParent) {
-        position = { top: rect.bottom, left: rect.left, width: rect.width }
+        if (verticalExpand === EXPAND_UP) {
+          position = { bottom: windowHeight - rect.top, left: rect.left, width: rect.width }
+        } else {
+          position = { top: rect.bottom, left: rect.left, width: rect.width }
+        }
       } else if (center - menuWidth / 2 < 20) {
         position.left = rect.left
       } else if (center + menuWidth / 2 > windowWidth - 20) {
@@ -567,7 +599,12 @@ export class MultiMenuTrigger extends Component {
       }
     }
 
-    this.setState({ position, expandDirection, expanded: true })
+    this.setState({
+      position,
+      expandDirection,
+      verticalExpand,
+      expanded: true
+    })
   }
 
   handleSelect = val => {
@@ -624,13 +661,14 @@ export class MultiMenuTrigger extends Component {
       isStyledMenu
     } = this.props
 
-    let { expandDirection, expanded, position } = this.state
+    let { expandDirection, expanded, position, verticalExpand } = this.state
 
     return (
       <div
         className={classNames(
           'multi-menu-trigger',
           className,
+          `expand-${verticalExpand}`,
           { expanded, 'multi-menu-dark': dark }
         )}
         ref={this.elementRef}
@@ -654,6 +692,7 @@ export class MultiMenuTrigger extends Component {
               <MultiMenuWrapper
                 isStyledMenu={isStyledMenu}
                 expandDirection={expandDirection}
+                verticalExpand={verticalExpand}
                 menu={menu}
                 onSelect={this.handleSelect}
                 position={position}

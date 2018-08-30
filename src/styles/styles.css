@@ -74,6 +74,10 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.multi-menu-wrapper-attached.expand-up .multi-menu {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.07), -4px 2px 6px rgba(0, 0, 0, 0.07), 4px 2px 6px rgba(0, 0, 0, 0.07);
+}
+
 .multi-menu-item {
   position: relative;
   padding-right: 20px;
@@ -174,6 +178,11 @@
   margin-left: -6px;
 }
 
+.multi-menu-trigger.expand-up.expanded:before,
+.multi-menu-trigger.expand-up.expanded:after {
+  display: none;
+}
+
 .multi-menu-wrapper {
   position: fixed;
   z-index: 99998;
@@ -245,15 +254,26 @@
   text-overflow: ellipsis;
 }
 
-.multi-select-menu.expanded .multi-select-menu-selection {
+.multi-select-menu.expand-down.expanded .multi-select-menu-selection {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.multi-menu-wrapper-attached > .multi-menu-inner-wrapper > .multi-menu {
+.multi-select-menu.expand-up.expanded .multi-select-menu-selection {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.multi-menu-wrapper-attached.expand-down > .multi-menu-inner-wrapper > .multi-menu {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   margin-top: -1px;
+}
+
+.multi-menu-wrapper-attached.expand-up > .multi-menu-inner-wrapper > .multi-menu {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: -1px;
 }
 
 .multi-menu-wrapper-attached > .multi-menu-inner-wrapper:before {
@@ -268,6 +288,12 @@
   z-index: 1;
 }
 
+.multi-menu-wrapper-attached.expand-up > .multi-menu-inner-wrapper:before {
+  top: auto;
+  bottom: -6px;
+  height: 7px;
+}
+
 .multi-select-menu.multi-menu-trigger.expanded:after {
   display: none;
 }
@@ -280,31 +306,3 @@
   padding: 0 12px;
 }
 
-/* Dark theme */
-
-.multi-menu-trigger.multi-menu-dark {
-  .multi-menu, .multi-select-menu-selection {
-    color: #fff;
-    background: #222;
-  }
-
-  .multi-menu-trigger.expanded:after {
-    border-bottom-color: #222;
-  }
-
-  .multi-menu-trigger.expanded:before {
-    display: none;
-  }
-
-  .multi-menu-spacer {
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .multi-menu-item.has-children:after, .multi-select-menu-expand-icon:before {
-    background: #fff;
-  }
-
-  .multi-select-menu-selection {
-    box-shadow: none;
-  }
-}

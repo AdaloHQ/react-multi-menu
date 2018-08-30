@@ -54,12 +54,21 @@ const menuData = [
           { label: 'Sub-child 10', value: 'sc10' },
           { label: 'Sub-child 11', value: 'sc11' },
           { label: 'Sub-child 12', value: 'sc12' },
-          { label: 'Sub-child 1', value: 'sc1' },
-          { label: 'Sub-child 2', value: 'sc2' },
+          { label: 'Sub-child 13', value: 'sc13' },
+          { label: 'Sub-child 14', value: 'sc2' },
         ])
       },
     ]
   },
+  { label: 'Child 6', value: 'c6' },
+  { label: 'Child 7', value: 'c7' },
+  { label: 'Child 8', value: 'c8' },
+  { label: 'Child 9', value: 'c9' },
+  { label: 'Child 10', value: 'c10' },
+  { label: 'Child 11', value: 'c11' },
+  { label: 'Child 12', value: 'c12' },
+  { label: 'Child 13', value: 'c13' },
+  { label: 'Child 14', value: 'c2' },
 ]
 
 const styles = { display: 'flex', flexDirection: 'row' }
@@ -168,6 +177,15 @@ storiesOf('MultiSelectMenu', module)
       <MultiSelectWrapper placeholder="Nothing to select" />
     </div>
   ))
+  .add('from bottom', () => (
+    <div style={{ position: 'absolute', bottom: 20, left: 20, right: 20 }}>
+      <MultiSelectWrapper
+        options={menuData}
+        comparator={deepEqual}
+        onChange={action('Change value')}
+      />
+    </div>
+  ))
 
 storiesOf('MultiMenuTrigger', module)
   .add('Aligned Left', () => (
@@ -210,6 +228,23 @@ storiesOf('MultiMenuTrigger', module)
       </MultiMenuTrigger>
     </div>
   ))
+  .add('Aligned Bottom, Expand Upward', () => (
+    <div style={{
+      ...styles,
+      position: 'absolute',
+      bottom: 20,
+      right: 0,
+      left: 0,
+      justifyContent: 'center',
+    }}>
+      <MultiMenuTrigger
+        menu={menuData}
+        onSelect={action('Selected option')}
+      >
+        Click Me
+      </MultiMenuTrigger>
+    </div>
+  ))
   .add('Preventing scrolling', () => (
     <div>
       <div style={{ ...styles, justifyContent: 'center' }}>
@@ -221,38 +256,6 @@ storiesOf('MultiMenuTrigger', module)
         </MultiMenuTrigger>
       </div>
       <div style={{ height: 900, marginTop: 20, backgroundColor: '#faa' }} />
-    </div>
-  ))
-  .add('Stops event propagation', () => (
-    <a
-      href="http://google.com"
-      target="_blank"
-      style={{
-        background: '#ff0',
-        padding: 60,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start'
-      }}
-      onClick={action('Clicked outside')}
-    >
-      <MultiMenuTrigger
-        menu={menuData}
-        onSelect={action('Selected option')}
-      >
-        Click Me
-      </MultiMenuTrigger>
-    </a>
-  ))
-  .add('Dark', () => (
-    <div style={{ ...styles, justifyContent: 'center' }}>
-      <MultiMenuTrigger
-        dark
-        menu={menuData}
-        onSelect={action('Selected option')}
-      >
-        Click Me
-      </MultiMenuTrigger>
     </div>
   ))
 
