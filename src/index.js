@@ -35,13 +35,13 @@ const stopPropagation = e => {
 }
 
 // Implements depth first search to find current value
-const getByValue = (options, value, comparator=null) => {
+const getByValue = (options, value, comparator = null) => {
   if (!comparator) { comparator = (a, b) => a === b }
 
   if (!options || typeof options !== 'object') { return undefined }
 
   for (let opt of options) {
-    if (!opt || !value) { continue }
+    if (!opt || value === undefined || value === null) { continue }
 
     if (comparator(opt.value, value)) {
       return opt
