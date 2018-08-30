@@ -4,7 +4,13 @@ import classNames from 'classnames'
 import DocumentEvents from 'react-document-events'
 
 import { isDescendent } from './dom'
-import { getMenuHeight, getMenuItemOffset } from './sizing'
+
+import {
+  getMenuHeight,
+  getMenuItemOffset,
+  MENU_PAD,
+  DEFAULT_ROW_HEIGHT
+} from './sizing'
 
 const LEFT = 'left'
 const RIGHT = 'right'
@@ -105,7 +111,8 @@ export default class MultiSelectMenu extends Component {
       comparator,
       dark,
       onChange,
-      options
+      options,
+      rowHeight,
     } = this.props
 
     let label = this.getLabel()
@@ -119,6 +126,7 @@ export default class MultiSelectMenu extends Component {
         menu={options}
         onSelect={onChange}
         menuClassName={menuClassName}
+        rowHeight={rowHeight}
       >
         <div className="multi-select-menu-selection">
           <span className="multi-select-menu-value">
@@ -135,6 +143,7 @@ export class MultiMenuWrapper extends Component {
   static defaultProps = {
     expandDirection: RIGHT,
     verticalExpand: EXPAND_DOWN,
+    rowHeight: DEFAULT_ROW_HEIGHT,
   }
 
   constructor(props) {
@@ -174,6 +183,7 @@ export class MultiMenuWrapper extends Component {
       isStyledMenu,
       className,
       verticalExpand,
+      rowHeight,
     } = this.props
 
     console.log('VERTICAL EXPAND:', verticalExpand)
@@ -212,6 +222,7 @@ export class MultiMenuWrapper extends Component {
           width={position.width}
           onHover={this.handleHover}
           maxHeight={maxHeight}
+          rowHeight={rowHeight}
         />
       </div>
     )
@@ -232,7 +243,7 @@ export class MultiMenu extends Component {
   renderOpenMenu = () => {
     if (!this._el) { return null }
 
-    let { basePath, openPath, onHover, onSelect } = this.props
+    let { basePath, openPath, onHover, onSelect, rowHeight } = this.props
     let menu = this.getMenu()
 
     let openIndex
@@ -250,8 +261,8 @@ export class MultiMenu extends Component {
     let windowHeight = window.innerHeight
     let scrollTop = this._el.scrollTop
     let offsetTop = this._el.getBoundingClientRect().top
-    let calculatedHeight = getMenuHeight(openMenu)
-    let currentItemOffset = getMenuItemOffset(menu, openIndex)
+    let calculatedHeight = getMenuHeight(openMenu, rowHeight)
+    let currentItemOffset = getMenuItemOffset(menu, openIndex, rowHeight)
     let positionTop = currentItemOffset - scrollTop
     let currentOpenPath = basePath.concat([openIndex])
     let maxHeight = windowHeight - (offsetTop + positionTop) - WINDOW_PAD
@@ -279,6 +290,7 @@ export class MultiMenu extends Component {
           onSelect={onSelect}
           openPath={openPath}
           maxHeight={maxHeight}
+          rowHeight={rowHeight}
         />
       </div>
     )
@@ -304,9 +316,10 @@ export class MultiMenu extends Component {
   }
 
   setOverflow = () => {
-    let { maxHeight } = this.props
+    let { maxHeight, rowHeight } = this.props
     let menu = this.getMenu()
-    let calculatedHeight = getMenuHeight(menu)
+    let calculatedHeight = getMenuHeight(menu, rowHeight)
+    console.log('HEIGHT:', calculatedHeight)
 
     if (!this._el) { return }
 
@@ -360,6 +373,7 @@ export class MultiMenu extends Component {
       openPath,
       width,
       maxHeight,
+      rowHeight,
     } = this.props
 
     let menu = this.getMenu()
@@ -392,6 +406,7 @@ export class MultiMenu extends Component {
                     onSelect={onSelect}
                     openPath={openPath}
                     path={basePath.concat([i])}
+                    height={rowHeight}
                   />
                 ))
               : <div className="multi-menu-empty">Nothing Available</div>}
@@ -489,7 +504,7 @@ export class MenuItem extends Component {
   }
 
   render() {
-    let { data, path, onHover, onSelect, openPath } = this.props
+    let { data, path, onHover, onSelect, openPath, height } = this.props
 
     if (data === null) {
       return <MenuSpacer />
@@ -500,6 +515,10 @@ export class MenuItem extends Component {
     let open = matches(openPath, path)
     let hasChildren = this.hasChildren()
     let clickAction = data.onClick
+
+    let styles = {
+      height
+    }
 
     let childrenOnly = false
 
@@ -520,6 +539,7 @@ export class MenuItem extends Component {
           }
         )}
         onMouseOver={this.handleHover}
+        style={styles}
       >
         <div
           className="multi-menu-item-label"
@@ -577,9 +597,9 @@ export class MultiMenuTrigger extends Component {
       }
 
       if (verticalExpand === EXPAND_UP) {
-        position = { bottom: windowHeight - rect.top + 8 }
+        position = { bottom: windowHeight - rect.top + MENU_PAD }
       } else {
-        position = { top: rect.bottom + 8 }
+        position = { top: rect.bottom + MENU_PAD }
       }
 
       let menuWidth = 180
@@ -658,7 +678,8 @@ export class MultiMenuTrigger extends Component {
       menuClassName,
       dark,
       menu,
-      isStyledMenu
+      isStyledMenu,
+      rowHeight,
     } = this.props
 
     let { expandDirection, expanded, position, verticalExpand } = this.state
@@ -697,6 +718,7 @@ export class MultiMenuTrigger extends Component {
                 onSelect={this.handleSelect}
                 position={position}
                 className={menuClassName}
+                rowHeight={rowHeight}
               />
             </MenuPortal>
           : null}

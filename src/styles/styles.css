@@ -82,6 +82,10 @@
   position: relative;
   padding-right: 20px;
   user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
 }
 
 .multi-menu-item.open, .multi-menu-item:hover {
@@ -109,7 +113,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
-  padding: 4px 0 4px 12px;
+  padding: 0 0 0 12px;
 
   > .multi-menu-item-subtitle {
     font-size: 0.8em;

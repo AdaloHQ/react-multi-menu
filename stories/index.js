@@ -163,15 +163,6 @@ storiesOf('MultiSelectMenu', module)
       </div>
     )
   })
-  .add('dark', () => (
-    <div style={{ width: 200 }}>
-      <MultiSelectWrapper
-        dark
-        options={menuData}
-        onChange={action('Change value')}
-      />
-    </div>
-  ))
   .add('with no options', () => (
     <div style={{ width: 200 }}>
       <MultiSelectWrapper placeholder="Nothing to select" />
@@ -183,6 +174,15 @@ storiesOf('MultiSelectMenu', module)
         options={menuData}
         comparator={deepEqual}
         onChange={action('Change value')}
+      />
+    </div>
+  ))
+  .add('rowHeight=60', () => (
+    <div style={{ width: 200, margin: '0 auto' }}>
+      <MultiSelectWrapper
+        options={menuData}
+        onChange={action('Change value')}
+        rowHeight={60}
       />
     </div>
   ))
