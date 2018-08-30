@@ -524,6 +524,8 @@ export class MenuItem extends Component {
       else if (!clickAction) { disabled = true }
     }
 
+    let title = typeof data.label === 'string' ? data.label : undefined
+
     return (
       <div
         className={classNames(
@@ -536,12 +538,12 @@ export class MenuItem extends Component {
           }
         )}
         onMouseOver={this.handleHover}
+        onClick={this.handleClick}
         style={styles}
       >
         <div
           className="multi-menu-item-label"
-          onClick={this.handleClick}
-          title={data.label}
+          title={title}
         >
           {data.label}
           {data.subtitle

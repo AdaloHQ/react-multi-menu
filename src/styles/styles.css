@@ -86,6 +86,7 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
+  cursor: pointer;
 }
 
 .multi-menu-item.open, .multi-menu-item:hover {
@@ -112,7 +113,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: pointer;
   padding: 0 0 0 12px;
 
   > .multi-menu-item-subtitle {
