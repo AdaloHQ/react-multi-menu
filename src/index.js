@@ -186,8 +186,6 @@ export class MultiMenuWrapper extends Component {
       rowHeight,
     } = this.props
 
-    console.log('VERTICAL EXPAND:', verticalExpand)
-
     let { openPath } = this.state
 
     if (!position) { position = { top: WINDOW_PAD } }
@@ -319,7 +317,6 @@ export class MultiMenu extends Component {
     let { maxHeight, rowHeight } = this.props
     let menu = this.getMenu()
     let calculatedHeight = getMenuHeight(menu, rowHeight)
-    console.log('HEIGHT:', calculatedHeight)
 
     if (!this._el) { return }
 
