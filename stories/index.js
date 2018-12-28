@@ -186,6 +186,17 @@ storiesOf('MultiSelectMenu', module)
       />
     </div>
   ))
+  .add('not blurring input', () => (
+    <div style={{ width: 200, margin: '30px auto' }}>
+      <input type="text" />
+      <br />
+      <MultiSelectWrapper
+        options={menuData}
+        onChange={action('Changed value!')}
+        comparator={deepEqual}
+      />
+    </div>
+  ))
 
 storiesOf('MultiMenuTrigger', module)
   .add('Aligned Left', () => (

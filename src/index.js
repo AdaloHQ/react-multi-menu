@@ -567,6 +567,7 @@ export class MultiMenuTrigger extends Component {
 
   handleClick = e => {
     e.stopPropagation()
+    e.preventDefault()
 
     if (this.state.expanded) {
       return this.setState({ expanded: false })
