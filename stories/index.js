@@ -186,9 +186,9 @@ storiesOf('MultiSelectMenu', module)
       />
     </div>
   ))
-  .add('not blurring input', () => (
+  .add('Not blurring input', () => (
     <div style={{ width: 200, margin: '30px auto' }}>
-      <input type="text" />
+      <span contenteditable="true" type="text">Hello??</span>
       <br />
       <MultiSelectWrapper
         options={menuData}
@@ -267,6 +267,18 @@ storiesOf('MultiMenuTrigger', module)
         </MultiMenuTrigger>
       </div>
       <div style={{ height: 900, marginTop: 20, backgroundColor: '#faa' }} />
+    </div>
+  ))
+  .add('Not blurring input', () => (
+    <div style={{ width: 200, margin: '30px auto' }}>
+      <input type="text" />
+      <br />
+      <MultiMenuTrigger
+        menu={menuData}
+        onSelect={action('Changed value!')}
+      >
+        Click Me
+      </MultiMenuTrigger>
     </div>
   ))
 
