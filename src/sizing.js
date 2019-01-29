@@ -15,6 +15,14 @@ export const getMenuItemOffset = (options, index, rowHeight) => {
 
     if (option && option.label) {
       offset += rowHeight
+
+      if (option.children && option.inline) {
+        offset += getMenuItemOffset(
+          option.children,
+          option.children.length,
+          rowHeight
+        )
+      }
     } else {
       offset += SPACER_HEIGHT
     }

@@ -122,6 +122,10 @@
   }
 }
 
+.multi-menu-item.inline .multi-menu-item-label {
+  font-size: 0.8em;
+}
+
 .multi-menu-item.children-only > .multi-menu-item-label {
   cursor: default;
 }

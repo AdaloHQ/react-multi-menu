@@ -89,20 +89,7 @@ export default class MultiSelectMenu extends Component {
     } else if (Array.isArray(options)) {
       let selectedOption = getByValue(options, value, comparator)
 
-      if (selectedOption) {
-        label = (
-          <span className="multi-select-menu-value-sub">
-            <span>
-              {selectedOption.label}
-            </span>
-            {selectedOption.subtitle
-              ? <span className="multi-select-menu-value-subtitle">
-                  {selectedOption.subtitle}
-                </span>
-              : null}
-          </span>
-        )
-      }
+      if (selectedOption) { label = selectedOption.label }
     }
 
     if (!label) {
@@ -253,7 +240,15 @@ export class MultiMenu extends Component {
   renderOpenMenu = () => {
     if (!this._el) { return null }
 
-    let { basePath, openPath, onHover, onSelect, rowHeight } = this.props
+    let {
+      basePath,
+      openPath,
+      onHover,
+      onSelect,
+      rowHeight,
+      nested,
+    } = this.props
+
     let menu = this.getMenu()
 
     let openIndex
@@ -262,7 +257,8 @@ export class MultiMenu extends Component {
       openIndex = openPath[basePath.length]
     }
 
-    if (openIndex === undefined) { return null }
+    if (openIndex === undefined || nested) { return null }
+    if (menu[openIndex] && menu[openIndex].inline) { return null }
 
     let openMenu = menu[openIndex] && menu[openIndex].children
 
@@ -351,14 +347,38 @@ export class MultiMenu extends Component {
     this.setOverflow()
   }
 
-  evaluateMenu = (props = null) => {
+  evaluateMenuSub = (props = null, indent = 0) => {
     let { menu } = props || this.props
 
     if (typeof menu === 'function') {
-      this._evaluatedMenu = menu()
-    } else {
-      this._evaluatedMenu = menu
+      menu = menu()
     }
+
+    let result = []
+
+    for (let itm of menu) {
+      if (itm && itm.children && itm.inline) {
+        let parentItem = {
+          ...itm,
+          indent,
+          children: null,
+          subtitle: null,
+        }
+
+        let menu = itm.children
+
+        result = result.concat(
+          [parentItem].concat(this.evaluateMenuSub({ menu }, indent + 1)))
+      } else {
+        result.push(itm ? { ...itm, indent } : itm)
+      }
+    }
+
+    return result
+  }
+
+  evaluateMenu = props => {
+    this._evaluatedMenu = this.evaluateMenuSub(props)
   }
 
   getMenu = () => {
@@ -486,16 +506,22 @@ export class MenuItem extends Component {
     onSelect(value)
   }
 
-  hasChildren = () => {
+  getChildren = () => {
     let { data } = this.props
-
     let { children } = data
 
     if (typeof children === 'function') {
       children = children()
     }
 
-    return children && children.length > 0
+    return children || []
+  }
+
+  hasChildren = () => {
+    let { data } = this.props
+    let { children, inline } = data
+
+    return children && this.getChildren().length > 0 && !inline
   }
 
   handleHover = e => {
@@ -513,20 +539,21 @@ export class MenuItem extends Component {
   }
 
   render() {
-    let { data, path, onHover, onSelect, openPath, height } = this.props
+    let { data, path, onSelect, openPath, height, onHover } = this.props
 
     if (data === null) {
       return <MenuSpacer />
     }
 
-    let { disabled } = data
+    let { disabled, indent, inline } = data
 
     let open = matches(openPath, path)
     let hasChildren = this.hasChildren()
     let clickAction = data.onClick
 
     let styles = {
-      height
+      height,
+      paddingLeft: 16 * (indent || 0),
     }
 
     let childrenOnly = false
@@ -537,34 +564,38 @@ export class MenuItem extends Component {
     }
 
     let title = typeof data.label === 'string' ? data.label : undefined
+    let children = this.getChildren()
 
     return (
-      <div
-        className={classNames(
-          'multi-menu-item',
-          {
-            disabled,
-            open,
-            'has-children': hasChildren,
-            'children-only': childrenOnly
-          }
-        )}
-        onMouseOver={this.handleHover}
-        onClick={this.handleClick}
-        style={styles}
-      >
+      <React.Fragment>
         <div
-          className="multi-menu-item-label"
-          title={title}
+          className={classNames(
+            'multi-menu-item',
+            {
+              disabled,
+              open,
+              inline,
+              'has-children': hasChildren,
+              'children-only': childrenOnly
+            }
+          )}
+          onMouseOver={this.handleHover}
+          onClick={this.handleClick}
+          style={styles}
         >
-          {data.label}
-          {data.subtitle
-            ? <span className="multi-menu-item-subtitle">
-                {data.subtitle}
-              </span>
-            : null}
+          <div
+            className="multi-menu-item-label"
+            title={title}
+          >
+            {data.label}
+            {(data.subtitle && !inline)
+              ? <span className="multi-menu-item-subtitle">
+                  {data.subtitle}
+                </span>
+              : null}
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 }
@@ -577,6 +608,12 @@ export class MultiMenuTrigger extends Component {
     verticalExpand: EXPAND_DOWN,
   }
 
+  getMenuWidth = () => {
+    let { width } = this.props
+
+    return width || 180
+  }
+
   handleClick = e => {
     e.stopPropagation()
     e.preventDefault()
@@ -586,6 +623,7 @@ export class MultiMenuTrigger extends Component {
     }
 
     let { fitParent } = this.props
+    let menuWidth = this.getMenuWidth()
 
     let position = this.state.position
     let expandDirection = RIGHT
@@ -609,12 +647,10 @@ export class MultiMenuTrigger extends Component {
       }
 
       if (verticalExpand === EXPAND_UP) {
-        position = { bottom: windowHeight - rect.top + MENU_PAD }
+        position = { bottom: windowHeight - rect.top + MENU_PAD, width: menuWidth }
       } else {
-        position = { top: rect.bottom + MENU_PAD }
+        position = { top: rect.bottom + MENU_PAD, width: menuWidth }
       }
-
-      let menuWidth = 180
 
       if (fitParent) {
         if (verticalExpand === EXPAND_UP) {

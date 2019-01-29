@@ -15,8 +15,8 @@ const menuData = [
   { label: 'Item 3', value: 'item3', subtitle: 'Subtitle' },
   { label: 'Item with action', onClick: action('Click action') },
   {
-    label: 'Item 4',
-    value: 'item4',
+    label: 'Item 5',
+    value: 'item5',
     subtitle: 'With Children',
     children: [
       { label: 'Child 1 with a really long name', value: 'child1', subtitle: 'This should be hidden' },
@@ -60,15 +60,25 @@ const menuData = [
       },
     ]
   },
-  { label: 'Child 6', value: 'c6' },
-  { label: 'Child 7', value: 'c7' },
-  { label: 'Child 8', value: 'c8' },
-  { label: 'Child 9', value: 'c9' },
-  { label: 'Child 10', value: 'c10' },
-  { label: 'Child 11', value: 'c11' },
-  { label: 'Child 12', value: 'c12' },
-  { label: 'Child 13', value: 'c13' },
-  { label: 'Child 14', value: 'c2' },
+  { label: 'Item 6', value: 'item6' },
+  { label: 'Item 7', value: 'item7' },
+  {
+    label: 'Parent Section Title',
+    inline: true,
+    children: [
+      { label: 'Item 8', value: 'item8' },
+      { label: 'Item 9', value: 'item9' },
+      {
+        label: 'Item 10',
+        value: 'item10',
+        children: [{ label: 'Child 1', value: 'item10.1' }],
+      },
+      { label: 'Item 11', value: 'item11' },
+      { label: 'Item 12', value: 'item12' },
+      { label: 'Item 13', value: 'item15' },
+      { label: 'Item 14', value: 'item14' },
+    ]
+  },
 ]
 
 const styles = { display: 'flex', flexDirection: 'row' }
