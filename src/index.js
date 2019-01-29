@@ -89,7 +89,20 @@ export default class MultiSelectMenu extends Component {
     } else if (Array.isArray(options)) {
       let selectedOption = getByValue(options, value, comparator)
 
-      if (selectedOption) { label = selectedOption.label }
+      if (selectedOption) {
+        label = (
+          <span className="multi-select-menu-value-sub">
+            <span>
+              {selectedOption.label}
+            </span>
+            {selectedOption.subtitle
+              ? <span className="multi-select-menu-value-subtitle">
+                  {selectedOption.subtitle}
+                </span>
+              : null}
+          </span>
+        )
+      }
     }
 
     if (!label) {

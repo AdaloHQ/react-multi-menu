@@ -12,14 +12,14 @@ const menuData = [
   { label: 'Item 1', value: 'item1' },
   { label: 'Item 2', value: 'item2', subtitle: 'Disabled', disabled: true },
   null,
-  { label: 'Item 3', value: 'item3' },
+  { label: 'Item 3', value: 'item3', subtitle: 'Subtitle' },
   { label: 'Item with action', onClick: action('Click action') },
   {
     label: 'Item 4',
     value: 'item4',
     subtitle: 'With Children',
     children: [
-      { label: 'Child 1 with a really long name', value: 'child1' },
+      { label: 'Child 1 with a really long name', value: 'child1', subtitle: 'This should be hidden' },
       {
         label: 'Child 2',
         children: [

@@ -256,6 +256,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  .multi-select-menu-value-subtitle {
+    font-size: 0.8em;
+    color: #959595;
+    margin-left: 0.5em;
+  }
 }
 
 .multi-select-menu.expand-down.expanded .multi-select-menu-selection {
