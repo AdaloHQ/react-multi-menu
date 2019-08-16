@@ -112,6 +112,7 @@ export default class MultiSelectMenu extends Component {
       onChange,
       options,
       rowHeight,
+      childWidth,
     } = this.props
 
     let label = this.getLabel()
@@ -126,6 +127,7 @@ export default class MultiSelectMenu extends Component {
         onSelect={onChange}
         menuClassName={menuClassName}
         rowHeight={rowHeight}
+        childWidth={childWidth}
       >
         <div className="multi-select-menu-selection">
           <span className="multi-select-menu-value">
@@ -183,6 +185,7 @@ export class MultiMenuWrapper extends Component {
       className,
       verticalExpand,
       rowHeight,
+      childWidth,
     } = this.props
 
     let { openPath } = this.state
@@ -220,6 +223,7 @@ export class MultiMenuWrapper extends Component {
           onHover={this.handleHover}
           maxHeight={maxHeight}
           rowHeight={rowHeight}
+          childWidth={childWidth}
         />
       </div>
     )
@@ -247,6 +251,7 @@ export class MultiMenu extends Component {
       onSelect,
       rowHeight,
       nested,
+      childWidth,
     } = this.props
 
     let menu = this.getMenu()
@@ -297,6 +302,8 @@ export class MultiMenu extends Component {
           openPath={openPath}
           maxHeight={maxHeight}
           rowHeight={rowHeight}
+          width={childWidth}
+          childWidth={childWidth}
         />
       </div>
     )
@@ -728,6 +735,7 @@ export class MultiMenuTrigger extends Component {
       menu,
       isStyledMenu,
       rowHeight,
+      childWidth,
     } = this.props
 
     let { expandDirection, expanded, position, verticalExpand } = this.state
@@ -767,6 +775,7 @@ export class MultiMenuTrigger extends Component {
                 position={position}
                 className={menuClassName}
                 rowHeight={rowHeight}
+                childWidth={childWidth}
               />
             </MenuPortal>
           : null}

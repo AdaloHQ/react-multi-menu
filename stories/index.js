@@ -147,6 +147,15 @@ storiesOf('MultiSelectMenu', module)
       />
     </div>
   ))
+  .add('fixed-width, specifying child width', () => (
+    <div style={{ width: 200 }}>
+      <MultiSelectWrapper
+        options={menuData}
+        onChange={action('Change value')}
+        childWidth={400}
+      />
+    </div>
+  ))
   .add('with comparator', () => {
     let options = [
       { label: 'Option 1 (text)', value: 'hello' },
