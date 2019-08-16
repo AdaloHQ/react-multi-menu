@@ -61,4 +61,4 @@ package-lock.json
 yarn.lock
 *.swp
 .DS_Store
-
+.npmrc
