@@ -129,7 +129,7 @@ export default class MultiSelectMenu extends Component {
         rowHeight={rowHeight}
         childWidth={childWidth}
       >
-        <div className="multi-select-menu-selection">
+        <div className="multi-select-menu-selection" title={label}>
           <span className="multi-select-menu-value">
             {label}
           </span>
