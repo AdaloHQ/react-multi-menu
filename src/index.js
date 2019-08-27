@@ -292,6 +292,8 @@ export class MultiMenu extends Component {
       <div
         className="multi-menu-child"
         onMouseOver={stopPropagation}
+        onMouseDown={stopPropagation}
+        onClick={stopPropagation}
         style={{ top: positionTop }}
       >
         <MultiMenu
@@ -505,7 +507,7 @@ export class MenuItem extends Component {
     let { data: { value, onClick }, onSelect } = this.props
 
     if (onClick) {
-      onClick()
+      onClick(e)
     }
 
     if (!onSelect || (value === undefined && !onClick)) { return }
