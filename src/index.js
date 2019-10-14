@@ -116,6 +116,7 @@ export default class MultiSelectMenu extends Component {
     } = this.props
 
     let label = this.getLabel()
+    let title = typeof label === 'string' ? label : undefined
 
     return (
       <MultiMenuTrigger
@@ -129,7 +130,7 @@ export default class MultiSelectMenu extends Component {
         rowHeight={rowHeight}
         childWidth={childWidth}
       >
-        <div className="multi-select-menu-selection" title={label}>
+        <div className="multi-select-menu-selection" title={title}>
           <span className="multi-select-menu-value">
             {label}
           </span>
