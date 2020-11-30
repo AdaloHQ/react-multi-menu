@@ -268,6 +268,7 @@ export class MultiMenu extends Component {
     if (openIndex === undefined || nested) {
       return null
     }
+
     if (menu[openIndex] && menu[openIndex].inline) {
       return null
     }
