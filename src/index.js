@@ -610,8 +610,6 @@ export class MenuItem extends Component {
     let title = typeof data.label === 'string' ? data.label : undefined
     let children = this.getChildren()
 
-    console.log(data, 'is title?', data.type === 'title')
-
     return (
       <React.Fragment>
         <div
