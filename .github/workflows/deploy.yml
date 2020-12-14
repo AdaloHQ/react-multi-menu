@@ -18,7 +18,7 @@ jobs:
       - name: Installing dependencies
         run: yarn install --frozen-lockfile
       - name: Build lib
-        run: yarn run build
+        run: yarn compile && yarn compile:css
       - name: Publish to NPM
         uses: mikeal/merge-release@v4.0.7
         env:
