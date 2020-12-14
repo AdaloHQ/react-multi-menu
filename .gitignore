@@ -62,3 +62,6 @@ yarn.lock
 *.swp
 .DS_Store
 .npmrc
+
+# Output files
+lib

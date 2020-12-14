@@ -9,7 +9,7 @@ import {
   getMenuHeight,
   getMenuItemOffset,
   MENU_PAD,
-  DEFAULT_ROW_HEIGHT
+  DEFAULT_ROW_HEIGHT,
 } from './sizing'
 
 const LEFT = 'left'
@@ -43,12 +43,18 @@ const stopPropagation = e => {
 
 // Implements depth first search to find current value
 const getByValue = (options, value, comparator = null) => {
-  if (!comparator) { comparator = (a, b) => a === b }
+  if (!comparator) {
+    comparator = (a, b) => a === b
+  }
 
-  if (!options || typeof options !== 'object') { return undefined }
+  if (!options || typeof options !== 'object') {
+    return undefined
+  }
 
   for (let opt of options) {
-    if (!opt || value === undefined || value === null) { continue }
+    if (!opt || value === undefined || value === null) {
+      continue
+    }
 
     if (comparator(opt.value, value)) {
       return opt
@@ -57,7 +63,9 @@ const getByValue = (options, value, comparator = null) => {
     if (opt.children) {
       let childResult = getByValue(opt.children, value, comparator)
 
-      if (childResult) { return childResult }
+      if (childResult) {
+        return childResult
+      }
     }
   }
 }
@@ -69,19 +77,14 @@ export default class MultiSelectMenu extends Component {
   }
 
   getLabel() {
-    let {
-      value,
-      options,
-      getLabel,
-      placeholder,
-      comparator
-    } = this.props
+    let { value, options, getLabel, placeholder, comparator } = this.props
 
     let label = null
 
     if (typeof options === 'function' && !getLabel) {
       console.error(
-        'Warning: if options is a function, getLabel must also be provided')
+        'Warning: if options is a function, getLabel must also be provided'
+      )
     }
 
     if (getLabel) {
@@ -89,14 +92,14 @@ export default class MultiSelectMenu extends Component {
     } else if (Array.isArray(options)) {
       let selectedOption = getByValue(options, value, comparator)
 
-      if (selectedOption) { label = selectedOption.label }
+      if (selectedOption) {
+        label = selectedOption.label
+      }
     }
 
     if (!label) {
       return (
-        <span className="multi-select-menu-placeholder">
-          {placeholder}
-        </span>
+        <span className="multi-select-menu-placeholder">{placeholder}</span>
       )
     }
 
@@ -131,9 +134,7 @@ export default class MultiSelectMenu extends Component {
         childWidth={childWidth}
       >
         <div className="multi-select-menu-selection" title={title}>
-          <span className="multi-select-menu-value">
-            {label}
-          </span>
+          <span className="multi-select-menu-value">{label}</span>
           <span className="multi-select-menu-expand-icon" />
         </div>
       </MultiMenuTrigger>
@@ -171,7 +172,6 @@ export class MultiMenuWrapper extends Component {
     } else if (e.which === DOWN_ARROW) {
       // console.log("GETTING NEXT VALUE")
     }
-
   }
 
   render() {
@@ -191,7 +191,9 @@ export class MultiMenuWrapper extends Component {
 
     let { openPath } = this.state
 
-    if (!position) { position = { top: WINDOW_PAD } }
+    if (!position) {
+      position = { top: WINDOW_PAD }
+    }
 
     let maxHeight
 
@@ -212,9 +214,7 @@ export class MultiMenuWrapper extends Component {
         )}
         style={position}
       >
-        <DocumentEvents
-          onKeyDown={this.handleKeyDown}
-        />
+        <DocumentEvents onKeyDown={this.handleKeyDown} />
         <MultiMenu
           {...{ isSubMenu, onSelect }}
           basePath={[]}
@@ -243,7 +243,9 @@ export class MultiMenu extends Component {
   }
 
   renderOpenMenu = () => {
-    if (!this._el) { return null }
+    if (!this._el) {
+      return null
+    }
 
     let {
       basePath,
@@ -263,12 +265,19 @@ export class MultiMenu extends Component {
       openIndex = openPath[basePath.length]
     }
 
-    if (openIndex === undefined || nested) { return null }
-    if (menu[openIndex] && menu[openIndex].inline) { return null }
+    if (openIndex === undefined || nested) {
+      return null
+    }
+
+    if (menu[openIndex] && menu[openIndex].inline) {
+      return null
+    }
 
     let openMenu = menu[openIndex] && menu[openIndex].children
 
-    if (typeof openMenu === 'function') { openMenu = openMenu() }
+    if (typeof openMenu === 'function') {
+      openMenu = openMenu()
+    }
 
     let windowHeight = window.innerHeight
     let scrollTop = this._el.scrollTop
@@ -320,7 +329,9 @@ export class MultiMenu extends Component {
   }
 
   handleOverflowScroll = amount => {
-    if (!this._el) { return }
+    if (!this._el) {
+      return
+    }
 
     this._el.scrollTop += amount
 
@@ -336,15 +347,18 @@ export class MultiMenu extends Component {
     let menu = this.getMenu()
     let calculatedHeight = getMenuHeight(menu, rowHeight)
 
-    if (!this._el) { return }
+    if (!this._el) {
+      return
+    }
 
     let scrollOffset = this._el.scrollTop
     let overflowBefore = scrollOffset > 10
     let overflowAfter = calculatedHeight - scrollOffset > maxHeight + 10
 
-    if (overflowBefore !== this.state.overflowBefore ||
-        overflowAfter !== this.state.overflowAfter) {
-
+    if (
+      overflowBefore !== this.state.overflowBefore ||
+      overflowAfter !== this.state.overflowAfter
+    ) {
       this.setState({ overflowBefore, overflowAfter })
     }
   }
@@ -378,7 +392,8 @@ export class MultiMenu extends Component {
         let menu = itm.children
 
         result = result.concat(
-          [parentItem].concat(this.evaluateMenuSub({ menu }, indent + 1)))
+          [parentItem].concat(this.evaluateMenuSub({ menu }, indent + 1))
+        )
       } else {
         result.push(itm ? { ...itm, indent } : itm)
       }
@@ -436,26 +451,34 @@ export class MultiMenu extends Component {
             style={styles}
             ref={this.menuRef}
           >
-            {menu && menu.length > 0
-              ? menu.map((itm, i) => (
-                  <MenuItem
-                    key={i}
-                    data={itm}
-                    onHover={onHover}
-                    onSelect={onSelect}
-                    openPath={openPath}
-                    path={basePath.concat([i])}
-                    height={rowHeight}
-                  />
-                ))
-              : <div className="multi-menu-empty">Nothing Available</div>}
+            {menu && menu.length > 0 ? (
+              menu.map((itm, i) => (
+                <MenuItem
+                  key={i}
+                  data={itm}
+                  onHover={onHover}
+                  onSelect={onSelect}
+                  openPath={openPath}
+                  path={basePath.concat([i])}
+                  height={rowHeight}
+                />
+              ))
+            ) : (
+              <div className="multi-menu-empty">Nothing Available</div>
+            )}
           </div>
-          {overflowBefore
-            ? <OverflowControl direction="up" onScroll={this.handleOverflowScroll} />
-            : null}
-          {overflowAfter
-            ? <OverflowControl direction="down" onScroll={this.handleOverflowScroll} />
-            : null}
+          {overflowBefore ? (
+            <OverflowControl
+              direction="up"
+              onScroll={this.handleOverflowScroll}
+            />
+          ) : null}
+          {overflowAfter ? (
+            <OverflowControl
+              direction="down"
+              onScroll={this.handleOverflowScroll}
+            />
+          ) : null}
         </div>
         {this.renderOpenMenu()}
       </div>
@@ -501,17 +524,22 @@ export class OverflowControl extends Component {
   }
 }
 
-export const MenuSpacer = () => (<div className="multi-menu-spacer" />)
+export const MenuSpacer = () => <div className="multi-menu-spacer" />
 
 export class MenuItem extends Component {
   handleClick = e => {
-    let { data: { value, onClick }, onSelect } = this.props
+    let {
+      data: { value, onClick },
+      onSelect,
+    } = this.props
 
     if (onClick) {
       onClick(e)
     }
 
-    if (!onSelect || (value === undefined && !onClick)) { return }
+    if (!onSelect || (value === undefined && !onClick)) {
+      return
+    }
 
     onSelect(value)
   }
@@ -539,7 +567,9 @@ export class MenuItem extends Component {
 
     e.stopPropagation()
 
-    if (data.disabled) { return }
+    if (data.disabled) {
+      return
+    }
 
     if (this.hasChildren()) {
       onHover(path)
@@ -569,8 +599,13 @@ export class MenuItem extends Component {
     let childrenOnly = false
 
     if (data.value === undefined) {
-      if (hasChildren) { childrenOnly = true }
-      else if (!clickAction) { disabled = true }
+      if (hasChildren) {
+        childrenOnly = true
+      } else if (!clickAction) {
+        disabled = true
+      } else if (data.type === 'title') {
+        disabled = true
+      }
     }
 
     let title = typeof data.label === 'string' ? data.label : undefined
@@ -579,30 +614,23 @@ export class MenuItem extends Component {
     return (
       <React.Fragment>
         <div
-          className={classNames(
-            'multi-menu-item',
-            {
-              disabled,
-              open,
-              inline,
-              'has-children': hasChildren,
-              'children-only': childrenOnly
-            }
-          )}
+          className={classNames('multi-menu-item', {
+            disabled,
+            open,
+            inline,
+            'has-children': hasChildren,
+            'children-only': childrenOnly,
+            'menu-title': data.type === 'title',
+          })}
           onMouseOver={this.handleHover}
           onClick={this.handleClick}
           style={styles}
         >
-          <div
-            className="multi-menu-item-label"
-            title={title}
-          >
+          <div className="multi-menu-item-label" title={title}>
             {data.label}
-            {(data.subtitle && !inline)
-              ? <span className="multi-menu-item-subtitle">
-                  {data.subtitle}
-                </span>
-              : null}
+            {data.subtitle && !inline ? (
+              <span className="multi-menu-item-subtitle">{data.subtitle}</span>
+            ) : null}
           </div>
         </div>
       </React.Fragment>
@@ -657,14 +685,21 @@ export class MultiMenuTrigger extends Component {
       }
 
       if (verticalExpand === EXPAND_UP) {
-        position = { bottom: windowHeight - rect.top + MENU_PAD, width: menuWidth }
+        position = {
+          bottom: windowHeight - rect.top + MENU_PAD,
+          width: menuWidth,
+        }
       } else {
         position = { top: rect.bottom + MENU_PAD, width: menuWidth }
       }
 
       if (fitParent) {
         if (verticalExpand === EXPAND_UP) {
-          position = { bottom: windowHeight - rect.top, left: rect.left, width: rect.width }
+          position = {
+            bottom: windowHeight - rect.top,
+            left: rect.left,
+            width: rect.width,
+          }
         } else {
           position = { top: rect.bottom, left: rect.left, width: rect.width }
         }
@@ -681,7 +716,7 @@ export class MultiMenuTrigger extends Component {
       position,
       expandDirection,
       verticalExpand,
-      expanded: true
+      expanded: true,
     })
   }
 
@@ -696,7 +731,9 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleClickOutside = e => {
-    if (isDescendent(e.target, this.element)) { return }
+    if (isDescendent(e.target, this.element)) {
+      return
+    }
 
     this.setState({ expanded: false })
   }
@@ -719,7 +756,7 @@ export class MultiMenuTrigger extends Component {
     this.setState({ expanded: false })
   }
 
-  elementRef = el => this.element = el
+  elementRef = el => (this.element = el)
 
   componentWillMount() {
     window.addEventListener('blur', this.handleBlur)
@@ -757,31 +794,31 @@ export class MultiMenuTrigger extends Component {
         onDoubleClick={stopPropagation}
         onMouseUp={stopPropagation}
       >
-        {expanded
-          ? <DocumentEvents
-              onWheel={this.handleScroll}
-              onKeyDown={this.handleKeyDown}
+        {expanded ? (
+          <DocumentEvents
+            onWheel={this.handleScroll}
+            onKeyDown={this.handleKeyDown}
+          />
+        ) : null}
+        {expanded ? (
+          <MenuPortal>
+            <div
+              className="multi-menu-trigger-close"
+              onMouseDown={this.handleClose}
             />
-          : null}
-        {expanded
-          ? <MenuPortal>
-              <div
-                className="multi-menu-trigger-close"
-                onMouseDown={this.handleClose}
-              />
-              <MultiMenuWrapper
-                isStyledMenu={isStyledMenu}
-                expandDirection={expandDirection}
-                verticalExpand={verticalExpand}
-                menu={menu}
-                onSelect={this.handleSelect}
-                position={position}
-                className={menuClassName}
-                rowHeight={rowHeight}
-                childWidth={childWidth}
-              />
-            </MenuPortal>
-          : null}
+            <MultiMenuWrapper
+              isStyledMenu={isStyledMenu}
+              expandDirection={expandDirection}
+              verticalExpand={verticalExpand}
+              menu={menu}
+              onSelect={this.handleSelect}
+              position={position}
+              className={menuClassName}
+              rowHeight={rowHeight}
+              childWidth={childWidth}
+            />
+          </MenuPortal>
+        ) : null}
         <div
           className="multi-menu-trigger-element"
           onMouseDown={this.handleClick}
@@ -807,7 +844,9 @@ class MenuPortal extends Component {
   componentWillUnmount() {
     window.setTimeout(() => {
       // Remove node if exists
-      if (!this._node) { return }
+      if (!this._node) {
+        return
+      }
 
       document.body.removeChild(this._node)
       this._node = null
@@ -817,10 +856,9 @@ class MenuPortal extends Component {
   render() {
     let { children } = this.props
 
-    return ReactDOM.createPortal((
-      <React.Fragment>
-        {children}
-      </React.Fragment>
-    ), this.getNode())
+    return ReactDOM.createPortal(
+      <React.Fragment>{children}</React.Fragment>,
+      this.getNode()
+    )
   }
 }
