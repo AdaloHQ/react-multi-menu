@@ -71,9 +71,22 @@ const getByValue = (options, value, comparator = null) => {
 }
 
 export default class MultiSelectMenu extends Component {
+  constructor(props) {
+    super(props)
+    this.inputRef = React.createRef()
+  }
+
   static defaultProps = {
     placeholder: 'Select...',
     options: [],
+  }
+
+  state = {
+    expanded: false,
+  }
+
+  handleToggle = value => {
+    this.setState({ expanded: value })
   }
 
   getLabel() {
@@ -106,11 +119,44 @@ export default class MultiSelectMenu extends Component {
     return label
   }
 
+  renderTitle() {
+    const { handleSearch, searchValue, searchPlaceholder } = this.props
+    const { expanded } = this.state
+    const label = this.getLabel()
+
+    if (!handleSearch || (handleSearch && !expanded)) {
+      return <span className="multi-select-menu-value">{label}</span>
+    }
+
+    return (
+      <React.Fragment>
+        <span className="multi-select-menu-expand-icon" />
+        <input
+          type="text"
+          className="multi-select-menu-search"
+          onChange={handleSearch}
+          value={searchValue}
+          ref={this.inputRef}
+          placeholder={searchPlaceholder}
+        />
+      </React.Fragment>
+    )
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { handleSearch } = this.props
+
+    if (prevState.expanded !== this.state.expanded) {
+      if (this.state.expanded && handleSearch) {
+        this.inputRef.current.focus()
+      }
+    }
+  }
+
   render() {
     let {
       className,
       menuClassName,
-      comparator,
       dark,
       onChange,
       options,
@@ -118,7 +164,6 @@ export default class MultiSelectMenu extends Component {
       childWidth,
     } = this.props
 
-    let label = this.getLabel()
     let title = typeof label === 'string' ? label : undefined
 
     return (
@@ -132,9 +177,10 @@ export default class MultiSelectMenu extends Component {
         menuClassName={menuClassName}
         rowHeight={rowHeight}
         childWidth={childWidth}
+        handleToggle={this.handleToggle}
       >
         <div className="multi-select-menu-selection" title={title}>
-          <span className="multi-select-menu-value">{label}</span>
+          {this.renderTitle()}
           <span className="multi-select-menu-expand-icon" />
         </div>
       </MultiMenuTrigger>
@@ -653,10 +699,13 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleClick = e => {
+    const { handleToggle } = this.props
+
     e.stopPropagation()
     e.preventDefault()
 
     if (this.state.expanded) {
+      if (handleToggle) handleToggle(false)
       return this.setState({ expanded: false })
     }
 
@@ -712,18 +761,24 @@ export class MultiMenuTrigger extends Component {
       }
     }
 
-    this.setState({
-      position,
-      expandDirection,
-      verticalExpand,
-      expanded: true,
-    })
+    this.setState(
+      {
+        position,
+        expandDirection,
+        verticalExpand,
+        expanded: true,
+      },
+      () => {
+        if (handleToggle) handleToggle(true)
+      }
+    )
   }
 
   handleSelect = val => {
-    let { onSelect } = this.props
+    let { onSelect, handleToggle } = this.props
 
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
 
     if (onSelect) {
       onSelect(val)
@@ -731,15 +786,20 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleClickOutside = e => {
+    const { handleToggle } = this.props
+
     if (isDescendent(e.target, this.element)) {
       return
     }
 
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
   }
 
   handleClose = () => {
+    const { handleToggle } = this.props
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
   }
 
   handleScroll = e => {
@@ -747,13 +807,17 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleKeyDown = e => {
+    const { handleToggle } = this.props
     if (e.which === ESC) {
       this.setState({ expanded: false })
+      if (handleToggle) handleToggle(false)
     }
   }
 
   handleBlur = () => {
+    const { handleToggle } = this.props
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
   }
 
   elementRef = el => (this.element = el)

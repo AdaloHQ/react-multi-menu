@@ -261,6 +261,15 @@
   box-shadow: none;
 }
 
+.multi-select-menu-selection input {
+  border: unset;
+  background-color: transparent;
+}
+
+.multi-select-menu-selection input:focus {
+  outline: unset;
+}
+
 .multi-select-menu-value {
   display: block;
   white-space: nowrap;
