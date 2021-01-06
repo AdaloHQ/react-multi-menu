@@ -631,6 +631,8 @@ export class MenuItem extends Component {
       return <MenuSpacer />
     }
 
+    if (data.type === 'hidden') return null
+
     let { disabled, indent, inline } = data
 
     let open = matches(openPath, path)
@@ -660,19 +662,27 @@ export class MenuItem extends Component {
     return (
       <React.Fragment>
         <div
-          className={classNames('multi-menu-item', {
-            disabled,
-            open,
-            inline,
-            'has-children': hasChildren,
-            'children-only': childrenOnly,
-            'menu-title': data.type === 'title',
-          })}
+          className={classNames(
+            'multi-menu-item',
+            {
+              disabled,
+              open,
+              inline,
+              'has-children': hasChildren,
+              'children-only': childrenOnly,
+              'menu-title': data.type === 'title',
+            },
+            data.className
+          )}
           onMouseOver={this.handleHover}
           onClick={this.handleClick}
           style={styles}
         >
-          <div className="multi-menu-item-label" title={title}>
+          <div
+            className="multi-menu-item-label"
+            title={title}
+            style={data.styles}
+          >
             {data.label}
             {data.subtitle && !inline ? (
               <span className="multi-menu-item-subtitle">{data.subtitle}</span>
