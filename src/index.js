@@ -233,6 +233,7 @@ export class MultiMenuWrapper extends Component {
       verticalExpand,
       rowHeight,
       childWidth,
+      closeMenu,
     } = this.props
 
     let { openPath } = this.state
@@ -271,6 +272,7 @@ export class MultiMenuWrapper extends Component {
           maxHeight={maxHeight}
           rowHeight={rowHeight}
           childWidth={childWidth}
+          closeMenu={closeMenu}
         />
       </div>
     )
@@ -474,6 +476,7 @@ export class MultiMenu extends Component {
       width,
       maxHeight,
       rowHeight,
+      closeMenu,
     } = this.props
 
     let menu = this.getMenu()
@@ -507,6 +510,7 @@ export class MultiMenu extends Component {
                   openPath={openPath}
                   path={basePath.concat([i])}
                   height={rowHeight}
+                  closeMenu={closeMenu}
                 />
               ))
             ) : (
@@ -575,16 +579,18 @@ export const MenuSpacer = () => <div className="multi-menu-spacer" />
 export class MenuItem extends Component {
   handleClick = e => {
     let {
-      data: { value, onClick },
+      data: { value, onClick, locked },
       onSelect,
+      closeMenu,
     } = this.props
 
     if (onClick) {
       onClick(e)
     }
 
-    if (!onSelect || (value === undefined && !onClick)) {
-      return
+    if (!onSelect || (value === undefined && !onClick) || locked) {
+      if (locked) closeMenu()
+      return null
     }
 
     onSelect(value)
@@ -633,7 +639,7 @@ export class MenuItem extends Component {
 
     if (data.type === 'hidden') return null
 
-    let { disabled, indent, inline } = data
+    let { disabled, indent, inline, locked } = data
 
     let open = matches(openPath, path)
     let hasChildren = this.hasChildren()
@@ -666,6 +672,7 @@ export class MenuItem extends Component {
             'multi-menu-item',
             {
               disabled,
+              locked,
               open,
               inline,
               'has-children': hasChildren,
@@ -688,6 +695,7 @@ export class MenuItem extends Component {
               <span className="multi-menu-item-subtitle">{data.subtitle}</span>
             ) : null}
           </div>
+          {locked ? <span className="icon-lock" /> : null}
         </div>
       </React.Fragment>
     )
@@ -890,6 +898,7 @@ export class MultiMenuTrigger extends Component {
               className={menuClassName}
               rowHeight={rowHeight}
               childWidth={childWidth}
+              closeMenu={this.handleClose}
             />
           </MenuPortal>
         ) : null}
