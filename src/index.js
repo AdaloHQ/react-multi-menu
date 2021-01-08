@@ -71,9 +71,22 @@ const getByValue = (options, value, comparator = null) => {
 }
 
 export default class MultiSelectMenu extends Component {
+  constructor(props) {
+    super(props)
+    this.inputRef = React.createRef()
+  }
+
   static defaultProps = {
     placeholder: 'Select...',
     options: [],
+  }
+
+  state = {
+    expanded: false,
+  }
+
+  handleToggle = value => {
+    this.setState({ expanded: value })
   }
 
   getLabel() {
@@ -106,11 +119,44 @@ export default class MultiSelectMenu extends Component {
     return label
   }
 
+  renderTitle() {
+    const { handleSearch, searchValue, searchPlaceholder } = this.props
+    const { expanded } = this.state
+    const label = this.getLabel()
+
+    if (!handleSearch || (handleSearch && !expanded)) {
+      return <span className="multi-select-menu-value">{label}</span>
+    }
+
+    return (
+      <React.Fragment>
+        <span className="multi-select-menu-expand-icon" />
+        <input
+          type="text"
+          className="multi-select-menu-search"
+          onChange={handleSearch}
+          value={searchValue}
+          ref={this.inputRef}
+          placeholder={searchPlaceholder}
+        />
+      </React.Fragment>
+    )
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { handleSearch } = this.props
+
+    if (prevState.expanded !== this.state.expanded) {
+      if (this.state.expanded && handleSearch) {
+        this.inputRef.current.focus()
+      }
+    }
+  }
+
   render() {
     let {
       className,
       menuClassName,
-      comparator,
       dark,
       onChange,
       options,
@@ -118,7 +164,6 @@ export default class MultiSelectMenu extends Component {
       childWidth,
     } = this.props
 
-    let label = this.getLabel()
     let title = typeof label === 'string' ? label : undefined
 
     return (
@@ -132,9 +177,10 @@ export default class MultiSelectMenu extends Component {
         menuClassName={menuClassName}
         rowHeight={rowHeight}
         childWidth={childWidth}
+        handleToggle={this.handleToggle}
       >
         <div className="multi-select-menu-selection" title={title}>
-          <span className="multi-select-menu-value">{label}</span>
+          {this.renderTitle()}
           <span className="multi-select-menu-expand-icon" />
         </div>
       </MultiMenuTrigger>
@@ -187,6 +233,7 @@ export class MultiMenuWrapper extends Component {
       verticalExpand,
       rowHeight,
       childWidth,
+      closeMenu,
     } = this.props
 
     let { openPath } = this.state
@@ -225,6 +272,7 @@ export class MultiMenuWrapper extends Component {
           maxHeight={maxHeight}
           rowHeight={rowHeight}
           childWidth={childWidth}
+          closeMenu={closeMenu}
         />
       </div>
     )
@@ -428,6 +476,7 @@ export class MultiMenu extends Component {
       width,
       maxHeight,
       rowHeight,
+      closeMenu,
     } = this.props
 
     let menu = this.getMenu()
@@ -461,6 +510,7 @@ export class MultiMenu extends Component {
                   openPath={openPath}
                   path={basePath.concat([i])}
                   height={rowHeight}
+                  closeMenu={closeMenu}
                 />
               ))
             ) : (
@@ -529,16 +579,18 @@ export const MenuSpacer = () => <div className="multi-menu-spacer" />
 export class MenuItem extends Component {
   handleClick = e => {
     let {
-      data: { value, onClick },
+      data: { value, onClick, locked },
       onSelect,
+      closeMenu,
     } = this.props
 
     if (onClick) {
       onClick(e)
     }
 
-    if (!onSelect || (value === undefined && !onClick)) {
-      return
+    if (!onSelect || (value === undefined && !onClick) || locked) {
+      if (locked) closeMenu()
+      return null
     }
 
     onSelect(value)
@@ -585,7 +637,9 @@ export class MenuItem extends Component {
       return <MenuSpacer />
     }
 
-    let { disabled, indent, inline } = data
+    if (data.type === 'hidden') return null
+
+    let { disabled, indent, inline, locked } = data
 
     let open = matches(openPath, path)
     let hasChildren = this.hasChildren()
@@ -614,24 +668,34 @@ export class MenuItem extends Component {
     return (
       <React.Fragment>
         <div
-          className={classNames('multi-menu-item', {
-            disabled,
-            open,
-            inline,
-            'has-children': hasChildren,
-            'children-only': childrenOnly,
-            'menu-title': data.type === 'title',
-          })}
+          className={classNames(
+            'multi-menu-item',
+            {
+              disabled,
+              locked,
+              open,
+              inline,
+              'has-children': hasChildren,
+              'children-only': childrenOnly,
+              'menu-title': data.type === 'title',
+            },
+            data.className
+          )}
           onMouseOver={this.handleHover}
           onClick={this.handleClick}
           style={styles}
         >
-          <div className="multi-menu-item-label" title={title}>
+          <div
+            className="multi-menu-item-label"
+            title={title}
+            style={data.styles}
+          >
             {data.label}
             {data.subtitle && !inline ? (
               <span className="multi-menu-item-subtitle">{data.subtitle}</span>
             ) : null}
           </div>
+          {locked ? <span className="icon-lock" /> : null}
         </div>
       </React.Fragment>
     )
@@ -653,10 +717,13 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleClick = e => {
+    const { handleToggle } = this.props
+
     e.stopPropagation()
     e.preventDefault()
 
     if (this.state.expanded) {
+      if (handleToggle) handleToggle(false)
       return this.setState({ expanded: false })
     }
 
@@ -712,18 +779,24 @@ export class MultiMenuTrigger extends Component {
       }
     }
 
-    this.setState({
-      position,
-      expandDirection,
-      verticalExpand,
-      expanded: true,
-    })
+    this.setState(
+      {
+        position,
+        expandDirection,
+        verticalExpand,
+        expanded: true,
+      },
+      () => {
+        if (handleToggle) handleToggle(true)
+      }
+    )
   }
 
   handleSelect = val => {
-    let { onSelect } = this.props
+    let { onSelect, handleToggle } = this.props
 
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
 
     if (onSelect) {
       onSelect(val)
@@ -731,15 +804,20 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleClickOutside = e => {
+    const { handleToggle } = this.props
+
     if (isDescendent(e.target, this.element)) {
       return
     }
 
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
   }
 
   handleClose = () => {
+    const { handleToggle } = this.props
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
   }
 
   handleScroll = e => {
@@ -747,13 +825,17 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleKeyDown = e => {
+    const { handleToggle } = this.props
     if (e.which === ESC) {
       this.setState({ expanded: false })
+      if (handleToggle) handleToggle(false)
     }
   }
 
   handleBlur = () => {
+    const { handleToggle } = this.props
     this.setState({ expanded: false })
+    if (handleToggle) handleToggle(false)
   }
 
   elementRef = el => (this.element = el)
@@ -816,6 +898,7 @@ export class MultiMenuTrigger extends Component {
               className={menuClassName}
               rowHeight={rowHeight}
               childWidth={childWidth}
+              closeMenu={this.handleClose}
             />
           </MenuPortal>
         ) : null}
