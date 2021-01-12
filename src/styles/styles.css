@@ -35,7 +35,7 @@
 }
 
 .multi-menu-scroll-container {
-  padding: 8px 0;
+  padding: 14px 0;
   overflow-y: auto;
 }
 
@@ -270,12 +270,13 @@
   box-shadow: none;
 }
 
-.multi-select-menu-selection input {
+.multi-select-menu-selection .multi-select-menu-search {
   border: unset;
   background-color: transparent;
+  width: 100%;
 }
 
-.multi-select-menu-selection input:focus {
+.multi-select-menu-selection .multi-select-menu-search:focus {
   outline: unset;
 }
 

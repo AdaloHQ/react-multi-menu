@@ -579,7 +579,7 @@ export const MenuSpacer = () => <div className="multi-menu-spacer" />
 export class MenuItem extends Component {
   handleClick = e => {
     let {
-      data: { value, onClick, locked },
+      data: { value, onClick, locked, type },
       onSelect,
       closeMenu,
     } = this.props
@@ -588,7 +588,12 @@ export class MenuItem extends Component {
       onClick(e)
     }
 
-    if (!onSelect || (value === undefined && !onClick) || locked) {
+    if (
+      !onSelect ||
+      (value === undefined && !onClick) ||
+      locked ||
+      type === 'link'
+    ) {
       if (locked) closeMenu()
       return null
     }
@@ -657,8 +662,14 @@ export class MenuItem extends Component {
         childrenOnly = true
       } else if (!clickAction) {
         disabled = true
-      } else if (data.type === 'title') {
-        disabled = true
+      }
+
+      if (data.type) {
+        if (data.type === 'title') {
+          disabled = true
+        } else if (data.type === 'link') {
+          disabled = false
+        }
       }
     }
 
@@ -666,38 +677,36 @@ export class MenuItem extends Component {
     let children = this.getChildren()
 
     return (
-      <React.Fragment>
+      <div
+        className={classNames(
+          'multi-menu-item',
+          {
+            disabled,
+            locked,
+            open,
+            inline,
+            'has-children': hasChildren,
+            'children-only': childrenOnly,
+            'menu-title': data.type === 'title',
+          },
+          data.className
+        )}
+        onMouseOver={this.handleHover}
+        onClick={this.handleClick}
+        style={styles}
+      >
         <div
-          className={classNames(
-            'multi-menu-item',
-            {
-              disabled,
-              locked,
-              open,
-              inline,
-              'has-children': hasChildren,
-              'children-only': childrenOnly,
-              'menu-title': data.type === 'title',
-            },
-            data.className
-          )}
-          onMouseOver={this.handleHover}
-          onClick={this.handleClick}
-          style={styles}
+          className="multi-menu-item-label"
+          title={title}
+          style={data.styles}
         >
-          <div
-            className="multi-menu-item-label"
-            title={title}
-            style={data.styles}
-          >
-            {data.label}
-            {data.subtitle && !inline ? (
-              <span className="multi-menu-item-subtitle">{data.subtitle}</span>
-            ) : null}
-          </div>
-          {locked ? <span className="icon-lock" /> : null}
+          {data.label}
+          {data.subtitle && !inline ? (
+            <span className="multi-menu-item-subtitle">{data.subtitle}</span>
+          ) : null}
         </div>
-      </React.Fragment>
+        {locked ? <span className="icon-lock" /> : null}
+      </div>
     )
   }
 }
