@@ -141,6 +141,10 @@
   font-size: 0.8em;
 }
 
+.multi-menu-item.children-only {
+  cursor: default;
+}
+
 .multi-menu-item.children-only > .multi-menu-item-label {
   cursor: default;
 }
@@ -285,12 +289,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
 
-  .multi-select-menu-value-subtitle {
-    font-size: 0.8em;
-    color: #959595;
-    margin-left: 0.5em;
-  }
+.multi-select-menu-value .multi-select-menu-value-subtitle {
+  font-size: 0.8em;
+  color: #959595;
+  margin-left: 0.5em;
 }
 
 .multi-select-menu.expand-down.expanded .multi-select-menu-selection {
