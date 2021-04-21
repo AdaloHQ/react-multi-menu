@@ -216,7 +216,6 @@ export class MultiMenuWrapper extends Component {
 
   render() {
     let {
-      align,
       expandDirection,
       isSubMenu,
       menu,
@@ -668,7 +667,6 @@ export class MenuItem extends Component {
     }
 
     let title = typeof data.label === 'string' ? data.label : undefined
-    let children = this.getChildren()
 
     return (
       <div
