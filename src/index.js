@@ -212,12 +212,6 @@ export class MultiMenuWrapper extends Component {
     if (ARROWS.indexOf(e.which) >= 0) {
       e.preventDefault()
     }
-
-    if (e.which === UP_ARROW) {
-      // console.log("GETTING PREVIOUS VALUE")
-    } else if (e.which === DOWN_ARROW) {
-      // console.log("GETTING NEXT VALUE")
-    }
   }
 
   render() {
@@ -700,6 +694,7 @@ export class MenuItem extends Component {
           title={title}
           style={data.styles}
         >
+          {data.icon ? <span className={classNames('icon', 'icon-menu', `icon-${data.icon}`)}/> : null}
           {data.label}
           {data.subtitle && !inline ? (
             <span className="multi-menu-item-subtitle">{data.subtitle}</span>
