@@ -73,6 +73,22 @@
   width: 180px;
 }
 
+.multi-menu-wrapper.gold .multi-menu-item.menu-option:hover {
+  background-color: #fff2cf;
+}
+
+.multi-menu-wrapper.purple .multi-menu-item.menu-option:hover {
+  background-color: rgba(168, 32, 88, 0.1);
+}
+
+.multi-menu-wrapper.red .multi-menu-item.menu-option:hover {
+  background-color: rgba(239, 76, 48, 0.15);
+}
+
+.multi-menu-wrapper.teal .multi-menu-item.menu-option:hover {
+  background-color: rgba(0, 168, 152, 0.1)
+}
+
 .multi-menu,
 .multi-select-menu.expanded {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -129,6 +145,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 0 0 12px;
+  display: flex;
+  align-items: center;
+}
+
+.multi-menu-item-label .icon {
+  margin-right: 5px;
 }
 
 .multi-menu-item-label > .multi-menu-item-subtitle {

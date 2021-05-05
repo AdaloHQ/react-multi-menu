@@ -162,6 +162,7 @@ export default class MultiSelectMenu extends Component {
       options,
       rowHeight,
       childWidth,
+      menuTheme,
     } = this.props
 
     let title = typeof label === 'string' ? label : undefined
@@ -178,6 +179,7 @@ export default class MultiSelectMenu extends Component {
         rowHeight={rowHeight}
         childWidth={childWidth}
         handleToggle={this.handleToggle}
+        menuTheme={menuTheme}
       >
         <div className="multi-select-menu-selection" title={title}>
           {this.renderTitle()}
@@ -227,6 +229,7 @@ export class MultiMenuWrapper extends Component {
       rowHeight,
       childWidth,
       closeMenu,
+      menuTheme,
     } = this.props
 
     let { openPath } = this.state
@@ -250,6 +253,7 @@ export class MultiMenuWrapper extends Component {
           `expand-${expandDirection}`,
           `expand-${verticalExpand}`,
           className,
+          menuTheme,
           { 'multi-menu-wrapper-attached': isStyledMenu }
         )}
         style={position}
@@ -666,6 +670,7 @@ export class MenuItem extends Component {
             inline,
             'has-children': hasSubmenu,
             'children-only': childrenOnly,
+            'menu-option': isClickable,
           },
           data.className
         )}
@@ -846,6 +851,7 @@ export class MultiMenuTrigger extends Component {
       isStyledMenu,
       rowHeight,
       childWidth,
+      menuTheme,
     } = this.props
 
     let { expandDirection, expanded, position, verticalExpand } = this.state
@@ -887,6 +893,7 @@ export class MultiMenuTrigger extends Component {
               rowHeight={rowHeight}
               childWidth={childWidth}
               closeMenu={this.handleClose}
+              menuTheme={menuTheme}
             />
           </MenuPortal>
         ) : null}
