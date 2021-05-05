@@ -573,10 +573,16 @@ export class OverflowControl extends Component {
 
 export const MenuSpacer = () => <div className="multi-menu-spacer" />
 
-const getIcon = icon =>
-  typeof icon === 'string'
+const getIcon = icon => {
+  if (!icon) {
+    return null
+  }
+
+  return typeof icon === 'string'
     ? <span className={classNames('icon', `icon-${icon}` )} />
-    : icon || null
+    : icon
+}
+
 
 export class MenuItem extends Component {
   handleClick = e => {
