@@ -640,8 +640,7 @@ export class MenuItem extends Component {
 
     const open = matches(openPath, path)
 
-    const hasValue = data.value !== undefined
-    const hasChildren = this.hasChildren()
+    const hasSubmenu = this.hasChildren()
     const clickAction = data.onClick
 
     const styles = {
@@ -649,9 +648,11 @@ export class MenuItem extends Component {
       paddingLeft: 16 * (indent || 0),
     }
 
-    const isMenuOption = hasValue || clickAction
-    const childrenOnly = !isMenuOption && hasChildren
-    const disabled = !isMenuOption && !hasChildren
+    // the value could be present but falsy; we need to strictly check for undefined
+    const isClickable = data.value !== undefined || clickAction
+    
+    const childrenOnly = !isClickable && hasSubmenu
+    const disabled = !isClickable && !hasSubmenu
     const title = typeof data.label === 'string' ? data.label : undefined
 
     return (
@@ -663,7 +664,7 @@ export class MenuItem extends Component {
             locked,
             open,
             inline,
-            'has-children': hasChildren,
+            'has-children': hasSubmenu,
             'children-only': childrenOnly,
           },
           data.className
