@@ -354,12 +354,6 @@
   padding: 0 12px;
 }
 
-.multi-menu-item.menu-title {
-  color: #9a9a9a;
-  pointer-events: none;
-  font-size: 12px;
-}
-
 .icon-lock {
   position: relative;
   display: block;

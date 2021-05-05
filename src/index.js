@@ -584,8 +584,7 @@ export class MenuItem extends Component {
     if (
       !onSelect ||
       (value === undefined && !onClick) ||
-      locked ||
-      type === 'link'
+      locked
     ) {
       if (locked) closeMenu()
       return null
@@ -629,7 +628,7 @@ export class MenuItem extends Component {
   }
 
   render() {
-    let { data, path, onSelect, openPath, height, onHover } = this.props
+    let { data, path, openPath, height } = this.props
 
     if (data === null) {
       return <MenuSpacer />
@@ -637,36 +636,23 @@ export class MenuItem extends Component {
 
     if (data.type === 'hidden') return null
 
-    let { disabled, indent, inline, locked } = data
+    const { indent, inline, locked } = data
 
-    let open = matches(openPath, path)
-    let hasChildren = this.hasChildren()
-    let clickAction = data.onClick
+    const open = matches(openPath, path)
 
-    let styles = {
+    const hasValue = data.value !== undefined
+    const hasChildren = this.hasChildren()
+    const clickAction = data.onClick
+
+    const styles = {
       height,
       paddingLeft: 16 * (indent || 0),
     }
 
-    let childrenOnly = false
-
-    if (data.value === undefined) {
-      if (hasChildren) {
-        childrenOnly = true
-      } else if (!clickAction) {
-        disabled = true
-      }
-
-      if (data.type) {
-        if (data.type === 'title') {
-          disabled = true
-        } else if (data.type === 'link') {
-          disabled = false
-        }
-      }
-    }
-
-    let title = typeof data.label === 'string' ? data.label : undefined
+    const isMenuOption = hasValue || clickAction
+    const childrenOnly = !isMenuOption && hasChildren
+    const disabled = !isMenuOption && !hasChildren
+    const title = typeof data.label === 'string' ? data.label : undefined
 
     return (
       <div
@@ -679,7 +665,6 @@ export class MenuItem extends Component {
             inline,
             'has-children': hasChildren,
             'children-only': childrenOnly,
-            'menu-title': data.type === 'title',
           },
           data.className
         )}
@@ -692,7 +677,7 @@ export class MenuItem extends Component {
           title={title}
           style={data.styles}
         >
-          {data.icon ? <span className={classNames('icon', 'icon-menu', `icon-${data.icon}`)}/> : null}
+          {data.icon || null}
           {data.label}
           {data.subtitle && !inline ? (
             <span className="multi-menu-item-subtitle">{data.subtitle}</span>
