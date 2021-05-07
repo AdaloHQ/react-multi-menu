@@ -578,11 +578,12 @@ const getIcon = icon => {
     return null
   }
 
-  return typeof icon === 'string'
+  const iconBody = typeof icon === 'string'
     ? <span className={classNames('icon', `icon-${icon}` )} />
     : icon
-}
 
+  return <div className="multi-menu-item-icon">{iconBody}</div>
+}
 
 export class MenuItem extends Component {
   handleClick = e => {
@@ -695,7 +696,7 @@ export class MenuItem extends Component {
           style={data.styles}
         >
           {getIcon(data.icon)}
-          {data.label}
+          <span className="multi-menu-item-label-text">{data.label}</span>
           {data.subtitle && !inline ? (
             <span className="multi-menu-item-subtitle">{data.subtitle}</span>
           ) : null}
