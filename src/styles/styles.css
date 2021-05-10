@@ -143,6 +143,7 @@
 .multi-menu-item-icon {
   width: 24px;
   margin-right: 5px;
+  display: flex;
 }
 
 .multi-menu-item-label {
