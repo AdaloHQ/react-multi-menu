@@ -94,7 +94,8 @@
   background-color: rgba(0, 168, 152, 0.1)
 }
 
-.multi-menu-item.menu-option {
+.multi-menu-wrapper.red .multi-menu-item.menu-option,
+.multi-menu-wrapper.gold .multi-menu-item.menu-option {
   font-weight: bold;
 }
 
