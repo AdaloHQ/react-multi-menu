@@ -578,9 +578,22 @@ const getIcon = icon => {
     return null
   }
 
-  const iconBody = typeof icon === 'string'
-    ? <span className={classNames('icon', `icon-${icon}` )} />
-    : icon
+  let iconBody;
+
+  switch(typeof icon) {
+    // string name of the icon, for basic icons
+    case 'string':
+      iconBody = <span className={classNames('icon', `icon-${icon}` )} />
+      break
+    // boolean true, for empty icons
+    // does not render an icon, but indents the label as though there was an icon before it
+    case 'boolean':
+      iconBody = ''
+      break
+    // JSX object, for more complicated/customized icons
+    default:
+      iconBody = icon
+  }
 
   return <div className="multi-menu-item-icon">{iconBody}</div>
 }
