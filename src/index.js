@@ -280,11 +280,17 @@ export class MultiMenu extends Component {
   state = {
     overflowBefore: false,
     overflowAfter: false,
+    openIndex: undefined
   }
 
   constructor(props) {
     super(props)
     this.evaluateMenu(props)
+  }
+
+  openMenu = index => {
+    this.setState({ openIndex: index })
+    console.log(this.state.openIndex)
   }
 
   renderOpenMenu = () => {
@@ -304,11 +310,13 @@ export class MultiMenu extends Component {
 
     let menu = this.getMenu()
 
-    let openIndex
+    let openIndex = this.state.openIndex
 
-    if (matches(openPath, basePath)) {
-      openIndex = openPath[basePath.length]
-    }
+    console.log(menu)
+
+    // if (matches(openPath, basePath)) {
+    //   openIndex = openPath[basePath.length]
+    // }
 
     if (openIndex === undefined || nested) {
       return null
@@ -508,6 +516,8 @@ export class MultiMenu extends Component {
                   path={basePath.concat([i])}
                   height={rowHeight}
                   closeMenu={closeMenu}
+                  index={i}
+                  openMenu={this.openMenu}
                 />
               ))
             ) : (
@@ -641,7 +651,7 @@ export class MenuItem extends Component {
   }
 
   handleHover = e => {
-    let { data, path, onHover } = this.props
+    let { data, path, onHover, index, openMenu } = this.props
 
     e.stopPropagation()
 
@@ -650,9 +660,11 @@ export class MenuItem extends Component {
     }
 
     if (this.hasChildren()) {
-      onHover(path)
+      openMenu(index)
+      // onHover(path)
     } else {
-      onHover(path.slice(0, path.length - 1))
+      openMenu(undefined)
+      // onHover(path.slice(0, path.length - 1))
     }
   }
 
@@ -851,6 +863,7 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleBlur = () => {
+    // return
     const { handleToggle } = this.props
     this.setState({ expanded: false })
     if (handleToggle) handleToggle(false)
