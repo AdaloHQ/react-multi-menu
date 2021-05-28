@@ -5,6 +5,8 @@ import DocumentEvents from 'react-document-events'
 
 import { isDescendent } from './dom'
 
+import deepEqual from 'deep-equal'
+
 import {
   getMenuHeight,
   getMenuItemOffset,
@@ -425,6 +427,8 @@ export class MultiMenu extends Component {
   }
 
   evaluateMenuSub = (props = null, indent = 0) => {
+    console.log('EVALUATING')
+
     let { menu } = props || this.props
 
     if (typeof menu === 'function') {
@@ -464,7 +468,20 @@ export class MultiMenu extends Component {
   }
 
   shouldComponentUpdate(newProps) {
-    if (newProps.menu !== this.props.menu) {
+    // console.log('Old', this.props)
+    // console.log('New', newProps)
+    // console.log('Old Menu:', typeof this.props.menu === 'function' ? this.props.menu() : this.props.menu )
+    // console.log('New Menu:', typeof newProps.menu === 'function' ? newProps.menu() : newProps.menu)
+
+    const { basePath, openPath } = this.props
+    const { basePath: newBasePath, openPath: newOpenPath } = newProps
+
+    // console.log(deepEqual(openPath, newOpenPath))
+
+    const rerender = (newProps.menu !== this.props.menu) // && !deepEqual(openPath, newOpenPath)
+
+    if (rerender) {
+      // console.log('WILL EVALUATE')
       this.evaluateMenu(newProps)
     }
 
