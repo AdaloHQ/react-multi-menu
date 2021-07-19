@@ -23,7 +23,7 @@
 }
 
 .multi-menu {
-  width: 180px;
+  width: 200px;
   background: #f5f5f5;
   border-radius: 6px;
   color: #444;
@@ -70,7 +70,7 @@
 
 .multi-menu-inner-wrapper {
   position: relative;
-  width: 180px;
+  width: 200px;
 }
 
 .multi-menu-wrapper.gold .multi-menu-item.menu-option:hover {
