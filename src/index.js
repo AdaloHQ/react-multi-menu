@@ -715,7 +715,7 @@ export class MenuItem extends Component {
             <span className="multi-menu-item-subtitle">{data.subtitle}</span>
           ) : null}
         </div>
-        {locked ? <span className="icon-lock" /> : null}
+        {locked ? <span className="multi-menu-icon-lock" /> : null}
       </div>
     )
   }
