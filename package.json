@@ -1,6 +1,6 @@
 {
   "name": "@protonapp/react-multi-menu",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
