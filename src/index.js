@@ -574,7 +574,7 @@ export class OverflowControl extends Component {
 
 export const MenuSpacer = () => <div className="multi-menu-spacer" />
 
-const getIcon = icon => {
+const getIcon = (icon, modifier) => {
   if (!icon) {
     return null
   }
@@ -596,7 +596,7 @@ const getIcon = icon => {
       iconBody = icon
   }
 
-  return <div className="multi-menu-item-icon">{iconBody}</div>
+  return <div className={`multi-menu-item-icon multi-menu-item-icon--${modifier}`}>{iconBody}</div>
 }
 
 export class MenuItem extends Component {
@@ -709,13 +709,17 @@ export class MenuItem extends Component {
           title={title}
           style={data.styles}
         >
-          {getIcon(data.icon)}
+          {getIcon(data.icon, 'left')}
           <span className="multi-menu-item-label-text">{data.label}</span>
           {data.subtitle && !inline ? (
             <span className="multi-menu-item-subtitle">{data.subtitle}</span>
           ) : null}
         </div>
+<<<<<<< Updated upstream
         {locked ? <span className="multi-menu-icon-lock" /> : null}
+=======
+        {getIcon(data.rightIcon, 'right')}
+>>>>>>> Stashed changes
       </div>
     )
   }

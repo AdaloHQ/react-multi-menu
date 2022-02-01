@@ -114,15 +114,17 @@
   padding-right: 20px;
   user-select: none;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
+  align-items: center;
+  flex-direction: row;
   cursor: pointer;
 }
 
-.multi-menu-item.disabled {
+.multi-menu-item.disabled,
+.multi-menu-item.disabled:hover {
   color: #9a9a9a;
   pointer-events: none;
+  background-color: unset;
+  cursor: unset;
 }
 
 .multi-menu-item.locked {
@@ -151,15 +153,25 @@
 }
 
 .multi-menu-item-icon {
-  width: 24px;
-  margin-right: 10px;
   display: flex;
+  width: 24px;
+}
+
+.multi-menu-item-icon--left {
+  margin-right: 10px;
+}
+
+.multi-menu-item-icon--right {
+  margin-right: 0;
+  margin-left: auto;
+  pointer-events: auto;
 }
 
 .multi-menu-item-label {
   padding: 0 0 0 12px;
   display: flex;
   align-items: center;
+  width: 95%;
 }
 
 .multi-menu-item-label-text {
