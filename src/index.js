@@ -683,7 +683,14 @@ export class MenuItem extends Component {
     
     const childrenOnly = !isClickable && hasSubmenu
     const disabled = !isClickable && !hasSubmenu
-    const title = typeof data.label === 'string' ? data.label : undefined
+
+    let title
+
+    if (data.title) {
+      title = data.title
+    } else if (typeof data.label === 'string') {
+      title = data.label
+    }
 
     return (
       <div
