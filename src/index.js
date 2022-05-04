@@ -868,7 +868,6 @@ export class MultiMenuTrigger extends Component {
   }
 
   handleBlur = () => {
-    return
     const { handleToggle } = this.props
     this.setState({ expanded: false })
     if (handleToggle) handleToggle(false)
