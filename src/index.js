@@ -692,6 +692,14 @@ export class MenuItem extends Component {
       title = data.label
     }
 
+    // Adds HTML data set properties
+    const dataset = {}
+    if (data.dataset) {
+      for (const [key, value] of Object.entries(data.dataset)) {
+        dataset[`data-${key}`] = value
+      }
+    }
+
     return (
       <div
         className={classNames(
@@ -710,6 +718,7 @@ export class MenuItem extends Component {
         onMouseOver={this.handleHover}
         onClick={this.handleClick}
         style={styles}
+        {...dataset}
       >
         <div
           className="multi-menu-item-label"
