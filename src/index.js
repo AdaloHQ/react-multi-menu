@@ -579,12 +579,12 @@ const getIcon = (icon, modifier) => {
     return null
   }
 
-  let iconBody;
+  let iconBody
 
-  switch(typeof icon) {
+  switch (typeof icon) {
     // string name of the icon, for basic icons
     case 'string':
-      iconBody = <span className={classNames('icon', `icon-${icon}` )} />
+      iconBody = <span className={classNames('icon', `icon-${icon}`)} />
       break
     // boolean true, for empty icons
     // does not render an icon, but indents the label as though there was an icon before it
@@ -596,7 +596,11 @@ const getIcon = (icon, modifier) => {
       iconBody = icon
   }
 
-  return <div className={`multi-menu-item-icon multi-menu-item-icon--${modifier}`}>{iconBody}</div>
+  return (
+    <div className={`multi-menu-item-icon multi-menu-item-icon--${modifier}`}>
+      {iconBody}
+    </div>
+  )
 }
 
 export class MenuItem extends Component {
@@ -611,11 +615,7 @@ export class MenuItem extends Component {
       onClick(e)
     }
 
-    if (
-      !onSelect ||
-      (value === undefined && !onClick) ||
-      locked
-    ) {
+    if (!onSelect || (value === undefined && !onClick) || locked) {
       if (locked) closeMenu()
       return null
     }
@@ -666,7 +666,7 @@ export class MenuItem extends Component {
 
     if (data.type === 'hidden') return null
 
-    const { indent, inline, locked } = data
+    const { indent, inline, locked, trial } = data
 
     const open = matches(openPath, path)
 
@@ -680,7 +680,7 @@ export class MenuItem extends Component {
 
     // the value could be present but falsy; we need to strictly check for undefined
     const isClickable = data.value !== undefined || clickAction
-    
+
     const childrenOnly = !isClickable && hasSubmenu
     const disabled = !isClickable && !hasSubmenu
 
@@ -707,6 +707,7 @@ export class MenuItem extends Component {
           {
             disabled,
             locked,
+            trial,
             open,
             inline,
             'has-children': hasSubmenu,
