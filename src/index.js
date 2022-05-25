@@ -666,7 +666,7 @@ export class MenuItem extends Component {
 
     if (data.type === 'hidden') return null
 
-    const { indent, inline, locked, hoverContent ='upgrade' } = data
+    const { indent, inline, locked, hoverContent = 'upgrade' } = data
 
     const open = matches(openPath, path)
 
