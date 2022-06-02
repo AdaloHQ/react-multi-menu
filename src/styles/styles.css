@@ -148,7 +148,7 @@
   top: auto;
   bottom: auto;
   margin: auto;
-  color: #a82058;
+  color: attr(hovercontentcolor);
   text-transform: uppercase;
   font-size: 10px;
 }
