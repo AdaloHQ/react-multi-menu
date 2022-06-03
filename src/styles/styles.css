@@ -81,6 +81,10 @@
   background-color: rgba(168, 32, 88, 0.1);
 }
 
+.multi-menu-wrapper.purple .multi-menu-item.locked.menu-option:hover:before {
+  color: #a82058;
+}
+
 .multi-menu-wrapper.red .multi-menu-item.menu-option:hover {
   background-color: rgba(239, 76, 48, 0.15);
   color: #ef4c30;
@@ -148,7 +152,6 @@
   top: auto;
   bottom: auto;
   margin: auto;
-  color: #a82058;
   text-transform: uppercase;
   font-size: 10px;
 }
