@@ -85,8 +85,12 @@
   color: #a82058;
 }
 
-.multi-menu-wrapper.red .multi-menu-item.menu-option:hover {
+.multi-menu-wrapper.red .multi-menu-item:not(.locked).menu-option:hover {
   background-color: rgba(239, 76, 48, 0.15);
+  color: #ef4c30;
+}
+
+.multi-menu-wrapper.red .multi-menu-item.locked.menu-option:hover:before {
   color: #ef4c30;
 }
 
@@ -96,6 +100,14 @@
 
 .multi-menu-wrapper.teal .multi-menu-item.menu-option:hover {
   background-color: rgba(0, 168, 152, 0.1);
+}
+
+.multi-menu-wrapper .multi-menu-item.locked.menu-option:hover .icon {
+  background-color: #cecece;
+}
+
+.multi-menu-wrapper .multi-menu-item.locked.menu-option:hover {
+  background-color: unset;
 }
 
 .multi-menu-wrapper.red .multi-menu-item.menu-option,
@@ -137,6 +149,10 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.multi-menu-item.locked .icon {
+  background-color: #d0d0d0;
 }
 
 .multi-menu-item.locked:hover {
