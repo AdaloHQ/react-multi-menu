@@ -85,6 +85,12 @@
   color: #a82058;
 }
 
+.multi-menu-wrapper.gold .multi-menu-item.locked.menu-option:hover:before {
+  background-color: white;
+  padding-left: 4px;
+  color: #FFAD00;
+}
+
 .multi-menu-wrapper.red .multi-menu-item:not(.locked).menu-option:hover {
   background-color: rgba(239, 76, 48, 0.15);
   color: #ef4c30;

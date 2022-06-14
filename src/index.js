@@ -301,6 +301,7 @@ export class MultiMenu extends Component {
       rowHeight,
       nested,
       childWidth,
+      closeMenu,
     } = this.props
 
     let menu = this.getMenu()
@@ -355,6 +356,7 @@ export class MultiMenu extends Component {
         <MultiMenu
           basePath={currentOpenPath}
           menu={openMenu}
+          closeMenu={closeMenu}
           onHover={onHover}
           onSelect={onSelect}
           openPath={openPath}
