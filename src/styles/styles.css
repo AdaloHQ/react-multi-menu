@@ -73,10 +73,17 @@
   width: 200px;
 }
 
+/**** THEMES ****/
+/* GOLD */
 .multi-menu-wrapper.gold .multi-menu-item.menu-option:hover {
   background-color: #fff2cf;
 }
 
+.multi-menu-wrapper.gold .multi-menu-item.locked.menu-option:hover:before {
+  color: #ffad00;
+}
+
+/* PURPLE */
 .multi-menu-wrapper.purple .multi-menu-item:not(.locked).menu-option:hover {
   background-color: rgba(168, 32, 88, 0.1);
 }
@@ -85,10 +92,7 @@
   color: #a82058;
 }
 
-.multi-menu-wrapper.gold .multi-menu-item.locked.menu-option:hover:before {
-  color: #ffad00;
-}
-
+/* RED */
 .multi-menu-wrapper.red .multi-menu-item:not(.locked).menu-option:hover {
   background-color: rgba(239, 76, 48, 0.15);
   color: #ef4c30;
@@ -102,9 +106,15 @@
   background-color: #ef4c30;
 }
 
+/* TEAL */
 .multi-menu-wrapper.teal .multi-menu-item.menu-option:hover {
   background-color: rgba(0, 168, 152, 0.1);
 }
+
+.multi-menu-wrapper.teal .multi-menu-item.locked.menu-option:hover:before {
+  color: #00a898;
+}
+/********/
 
 .multi-menu-wrapper .multi-menu-item.locked.menu-option:hover .icon {
   background-color: #cecece;
