@@ -878,7 +878,7 @@ export class MultiMenuTrigger extends Component {
 
   elementRef = el => (this.element = el)
 
-  componentWillMount() {
+  componentDidMount() {
     window.addEventListener('blur', this.handleBlur)
   }
 
