@@ -168,14 +168,14 @@
   content: attr(hovercontent);
   position: absolute;
   display: block;
-  right: 48px;
+  right: 30px;
   top: auto;
   bottom: auto;
   margin: auto;
   text-transform: uppercase;
   font-size: 10px;
   background-color: #fff;
-  padding-left: 8px;
+  padding: 3px 0px 3px 8px;
 }
 
 .multi-menu-item-icon {
@@ -191,6 +191,8 @@
   margin-right: 0;
   margin-left: auto;
   pointer-events: auto;
+  position: absolute;
+  right: 0;
 }
 
 .multi-menu-item-label {
