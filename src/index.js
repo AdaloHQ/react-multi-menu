@@ -858,10 +858,6 @@ export class MultiMenuTrigger extends Component {
     if (handleToggle) handleToggle(false)
   }
 
-  handleScroll = e => {
-    e.preventDefault()
-  }
-
   handleKeyDown = e => {
     const { handleToggle } = this.props
     if (e.which === ESC) {
@@ -915,12 +911,7 @@ export class MultiMenuTrigger extends Component {
         onDoubleClick={stopPropagation}
         onMouseUp={stopPropagation}
       >
-        {expanded ? (
-          <DocumentEvents
-            onWheel={this.handleScroll}
-            onKeyDown={this.handleKeyDown}
-          />
-        ) : null}
+        {expanded ? <DocumentEvents onKeyDown={this.handleKeyDown} /> : null}
         {expanded ? (
           <MenuPortal>
             <div
